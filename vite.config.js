@@ -2,6 +2,11 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
     root: "src",
+    
+    preview: {
+        allowedHosts: ["swms-0iyt.onrender.com"],
+    },
+    
     build: {
         outDir: "../dist",
         rollupOptions: {
