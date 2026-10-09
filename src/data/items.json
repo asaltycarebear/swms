@@ -1,0 +1,360 @@
+[
+    {
+        "sku": "0001.1",
+        "description": "Small Red Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0001.2",
+        "description": "Medium Red Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0001.3",
+        "description": "Large Red Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+        {
+        "sku": "0002.1",
+        "description": "Small Blue Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0002.2",
+        "description": "Medium Blue Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0002.3",
+        "description": "Large Blue Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0003.1",
+        "description": "Small Green Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "2",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0003.2",
+        "description": "Medium Green Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "2",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0003.3",
+        "description": "Large Green Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "2",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0004.1",
+        "description": "Small Yellow Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "3",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0004.2",
+        "description": "Medium Yellow Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "3",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0004.3",
+        "description": "Large Yellow Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "3",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0005.1",
+        "description": "Small Black Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "4",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0005.2",
+        "description": "Medium Black Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "4",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0005.3",
+        "description": "Large Black Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "4",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0006.1",
+        "description": "Small White Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "5",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0006.2",
+        "description": "Medium White Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "5",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0006.3",
+        "description": "Large White Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "5",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0007.1",
+        "description": "Small Purple Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "6",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0007.2",
+        "description": "Medium Purple Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "6",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0007.3",
+        "description": "Large Purple Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "6",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+    {
+        "sku": "0008.1",
+        "description": "Small Orange Shirt",
+        "make": "Factory",
+        "model": "S1",
+        "weight": 0.5,
+        "length": 25,
+        "width": 20,
+        "height": 0.2,
+        "batchLot": "7",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0008.2",
+        "description": "Medium Orange Shirt",
+        "make": "Factory",
+        "model": "M1",
+        "weight": 0.55,
+        "length": 26,
+        "width": 20.5,
+        "height": 0.2,
+        "batchLot": "7",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    },
+
+    {
+        "sku": "0008.3",
+        "description": "Large Orange Shirt",
+        "make": "Factory",
+        "model": "L1",
+        "weight": 0.6,
+        "length": 27,
+        "width": 21,
+        "height": 0.2,
+        "batchLot": "7",
+        "productVersion": 1,
+        "costPerItem": 5.0,
+        "salePrice": 8.99
+    }
+]

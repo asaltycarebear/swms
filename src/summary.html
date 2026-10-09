@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Garrett Stockwell">
+    
+    <!--Update--> <meta name="description" content="View a complete summary of all inventory items, including SKU details, quantities, locations, specifications, and pricing.">
+    <!--Update--> <title>Stockwell Inventory – Summary</title>
+
+    <!--Update (facebook)--><meta property="og:title" content="Stockwell Inventory – Summary">
+    <!--Update (facebook)--><meta property="og:description" content="Access a detailed summary of all inventory items with SKU data, quantities, locations, batch lots, dimensions, and pricing.">
+    <!--Update (facebook)--><meta property="og:image" content="https://asaltycarebear.github.io/wdd231/images/profile.jpg">
+    <!--Update (facebook)--><meta property="og:url" content="https://asaltycarebear.github.io/wdd231/summary.html">
+    <!--Keep--><meta property="og:type" content="website">
+    
+    <!--Update--> <link rel="stylesheet" href="styles/styles.css">
+    <!--Update--> <link rel="stylesheet" href="styles/styles-large.css">
+    <!--Update (page css goes here)--><link rel="stylesheet" href="styles/summary.css">
+    
+    <!--Keep--> <script src="scripts/getdates.js" defer></script>
+    <!--Keep--> <script type="module" src="scripts/main.js"></script>
+    <!--Update (page script goes here)--> <script src="scripts/summary.js" defer></script>
+
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header id="header-main"></header>
+    
+    <main>
+        <div class="table-container">
+            
+            <div class="action">
+                <button id="clearTable">Clear Table</button>
+                <button id="exportCSV">Export Table to CSV</button>
+                <label for="clearAfterExport">Clear table after export: <input type="checkbox" id="clearAfterExport"></label>
+            </div>
+            
+            <table class="stocksummary" id="stocksummary">
+                <thead>
+                    <tr>
+                        <th>LPN</th> <!--LPN is short for Licence Plate Number-->
+                        <th>SKU</th>
+                        <th>Location</th>
+                        <th>Quantity</th>
+                        <th class="noMobile">Batch Lot</th>
+                        <th class="noMobile">Product Version</th>
+                        <th class="noMobile">Description</th>
+                        <th class="noMobile">Make</th>
+                        <th class="noMobile">Model</th>
+                        <th class="noMobile">Weight</th>
+                        <th class="noMobile">Length</th>
+                        <th class="noMobile">Width</th>
+                        <th class="noMobile">Height</th>
+                        <th class="noMobile">Cost per Item</th>
+                        <th class="noMobile">Item Sale Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- table rows here -->
+                 </tbody>
+            </table>
+        </div>
+
+        <div id="modalContainer"></div>
+    
+    </main>
+
+    <footer>
+        <a href="https://www.youtube.com/watch?v=JMLaCitEeaQ" target="_blank" rel="noopener noreferrer">
+            <img src="images/youtube_icon.png" alt="Video link"> Final Project Video link
+        </a>
+        <p>©️<span id="currentyear"></span> ❖ Garrett Stockwell ❖ Colorado, USA</p>
+        <p id="lastModified"></p>
+        <a href="https://www.github.com/" target="_blank" rel="noopener noreferrer">
+            <img src="images/github_icon.png" alt="Github link">
+        </a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+            <img src="images/linkedin_icon.png" alt="Linkedin link">
+        </a>
+        <a href="https://www.youtube.com/watch?v=JMLaCitEeaQ" target="_blank" rel="noopener noreferrer">
+            <img src="images/youtube_icon.png" alt="YouTube link">
+        </a>
+    </footer>
+</body>
+</html>

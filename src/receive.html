@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Garrett Stockwell">
+    
+    <!--Update--><meta name="description" content="Receive inventory, add new items, and manage stock details in the Stockwell Inventory system.">
+    <!--Update--><title>Stockwell Inventory – Receive & Add Items</title>
+    
+     <!--Update (facebook)--><meta property="og:title" content="Stockwell Inventory – Receive & Add Items">
+     <!--Update (facebook)--><meta property="og:description" content="Use this page to receive new inventory and create new item records in the Stockwell Inventory system.">
+     <!--Update (facebook)--><meta property="og:image" content="https://asaltycarebear.github.io/wdd231/images/profile.jpg">
+     <!--Update (facebook)--><meta property="og:url" content="https://asaltycarebear.github.io/wdd231/receive.html">
+    <!--Keep--><meta property="og:type" content="website">
+    
+    <!--Update--> <link rel="stylesheet" href="styles/styles.css">
+    <!--Update--> <link rel="stylesheet" href="styles/styles-large.css">
+    <!--Update (page css goes here)--><link rel="stylesheet" href="styles/receive.css">
+    
+    <!--Keep--> <script src="scripts/getdates.js" defer></script>
+    <!--Keep--> <script type="module" src="scripts/main.js"></script>
+    <!--Update (page script goes here)--> <script src="scripts/receive.js" defer></script>
+
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header id="header-main"></header>
+    
+    <main>
+
+        <div class="form-toggle">
+            <button id="showReceive">Receive Item</button>
+            <button id="showNewItem">New Item</button>
+        </div>
+
+        <!-- Receive Form -->
+        <form class="receiveForm" id="receiveForm" method="get" action="confirm.html">
+            <h2>Receive new pallet</h2> <!--Need to add id to change between new pallet and new item-->
+
+            <label for="receiveSku">SKU:</label>
+            <input type="text" id="receiveSku" name="sku" placeholder="Enter SKU">
+
+            <label for="receiveQuantity">Quantity:</label>
+            <input type="text" id="receiveQuantity" name="quantity" placeholder="Enter Quantity">   
+
+            <label for="receiveBatchLot">Batch Lot:</label>
+            <input type="text" id="receiveBatchLot" name="batchLot" placeholder="Batch Lot">
+
+            <label for="receiveProductVersion">Product Version:</label>
+            <input type="number" id="receiveProductVersion" name="productVersion" placeholder="Version Number" min="0" step="1">
+
+            <hr class="soft-divider">
+
+            <label for="receiveClearAfterSubmit">Clear Form on Submit:
+                <input type="checkbox" id="receiveClearAfterSubmit">
+            </label>
+
+            <input type="submit" value="Submit Form">
+        </form>
+
+        <!-- New Item Form -->
+        <form id="newItemForm" class="hidden" method="get" action="confirm.html">
+            <h2>Add New Item</h2>
+
+            <label for="newSku">SKU:</label>
+            <input type="text" id="newSku" name="sku" placeholder="Enter SKU">
+
+            <label for="newDescription">Description:</label>
+            <input type="text" id="newDescription" name="description" placeholder="Description">
+
+            <label for="newMake">Make:</label>
+            <input type="text" id="newMake" name="make" placeholder="Enter Make">
+
+            <label for="newModel">Model:</label>
+            <input type="text" id="newModel" name="model" placeholder="Enter Model">
+
+            <hr class="soft-divider">
+
+            <label for="newWeight">Weight:</label>
+            <input type="number" id="newWeight" name="weight" placeholder="Weight" min="0" step="0.01">
+
+            <label for="newLength">Length:</label>
+            <input type="number" id="newLength" name="length" placeholder="Length" min="0" step="0.01">
+
+            <label for="newWidth">Width:</label>
+            <input type="number" id="newWidth" name="width" placeholder="Width" min="0" step="0.01">
+
+            <label for="newHeight">Height:</label>
+            <input type="number" id="newHeight" name="height" placeholder="Height" min="0" step="0.01">
+
+            <hr class="soft-divider">
+
+            <label for="newItemBatchLot">Batch Lot:</label>
+            <input type="text" id="newItemBatchLot" name="batchLot" placeholder="Batch Lot">
+
+            <label for="newItemProductVersion">Product Version:</label>
+            <input type="number" id="newItemProductVersion" name="productVersion" placeholder="Version Number" min="0" step="1">
+
+            <hr class="soft-divider">
+
+            <label for="newCostPerItem">Cost per Item:</label>
+            <input type="number" id="newCostPerItem" name="costPerItem" placeholder="Cost" min="0" step="0.01">
+
+            <label for="newItemSalePrice">Item Sale Price:</label>
+            <input type="number" id="newItemSalePrice" name="itemSalePrice" placeholder="Sale Price" min="0" step="0.01">
+
+            <label for="newItemClearAfterSubmit">Clear Form on Submit:
+                <input type="checkbox" id="newItemClearAfterSubmit">
+            </label>
+            
+            <input type="submit" value="Create Item">
+            
+        </form>
+    </main>
+
+    <footer id="footer-main"></footer>
+</body>
+</html>

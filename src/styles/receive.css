@@ -1,0 +1,51 @@
+:root {
+  --primary-color: #FF8559;
+  --secondary-color: #24acff;
+  --accent1-color: white;
+  --accent2-color: #a3af9e;
+  --text-color: #0c1c00;
+  --heading-font: "Quantico", sans-serif;
+  --body-font: "Oxanium", sans-serif;
+}
+
+* {
+  color: var(--text-color);
+  font-family: var(--body-font);
+  box-sizing: border-box;
+}
+
+form {
+background-color: var(--accent2-color);
+font-family: var(--body-font);
+padding: 10px;
+display: flex;
+flex-direction: column;
+gap: 1rem;
+max-width: 400px;
+margin: 10% auto;
+}
+
+.soft-divider {
+border: none;
+height: 1px;
+background-color: var(--accent1-color);
+opacity: 0.5;
+margin: 1rem 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.form-toggle {
+    margin-bottom: 1rem;
+}
+
+.form-toggle button {
+    margin-right: 10px;
+    padding: 0.5rem 1rem;
+}
+
+.form-toggle button.active {
+    font-weight: bold;
+}

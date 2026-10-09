@@ -1,0 +1,45 @@
+/* Overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(2px);
+    z-index: 99;
+}
+
+/* Modal Box */
+.modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    z-index: 100;
+    text-align: center;
+    font-size: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.modal-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.lpn-click {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.modal-content img {
+    margin: 0.5rem 0 1rem 0;
+}
