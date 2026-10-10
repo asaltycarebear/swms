@@ -1,4 +1,4 @@
-// ***Buttons for toggling form***
+// *** Buttons for toggling forms ***
 
 const showReceiveBtn = document.getElementById("showReceive");
 const showNewItemBtn = document.getElementById("showNewItem");
@@ -6,65 +6,128 @@ const showNewItemBtn = document.getElementById("showNewItem");
 const receiveForm = document.getElementById("receiveForm");
 const newItemForm = document.getElementById("newItemForm");
 
-showReceiveBtn.classList.add("active");
-
-showReceiveBtn.addEventListener("click", () => {
+function showReceiveForm() {
     receiveForm.classList.remove("hidden");
     newItemForm.classList.add("hidden");
 
     showReceiveBtn.classList.add("active");
     showNewItemBtn.classList.remove("active");
-});
+}
 
-showNewItemBtn.addEventListener("click", () => {
+function showNewItemForm() {
     newItemForm.classList.remove("hidden");
     receiveForm.classList.add("hidden");
 
     showNewItemBtn.classList.add("active");
     showReceiveBtn.classList.remove("active");
-});
+}
 
-// ***Create item in local storage. Need backend server for actual application***
+showReceiveBtn.addEventListener("click", showReceiveForm);
+showNewItemBtn.addEventListener("click", showNewItemForm);
 
-newItemForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+// Set default form.
+showReceiveForm();
 
-    // Build the item object from the form
-    const item = {
+/*
+ * New Item settings
+ *
+ * Keep false to save only to localStorage.
+ * Change to true when the backend API is ready. Will make this a setting later
+ */
+const SAVE_TO_JSON = true;
+
+// Build the item object from the form.
+function buildNewItem() {
+    return {
         sku: document.getElementById("newSku").value.trim(),
         description: document.getElementById("newDescription").value.trim(),
         make: document.getElementById("newMake").value.trim(),
         model: document.getElementById("newModel").value.trim(),
-        weight: parseFloat(document.getElementById("newWeight").value) || 0,
-        length: parseFloat(document.getElementById("newLength").value) || 0,
-        width: parseFloat(document.getElementById("newWidth").value) || 0,
-        height: parseFloat(document.getElementById("newHeight").value) || 0,
+        weight: Number(document.getElementById("newWeight").value) || 0,
+        length: Number(document.getElementById("newLength").value) || 0,
+        width: Number(document.getElementById("newWidth").value) || 0,
+        height: Number(document.getElementById("newHeight").value) || 0,
         batchLot: document.getElementById("newItemBatchLot").value.trim(),
-        productVersion: parseInt(document.getElementById("newItemProductVersion").value) || 0,
-        costPerItem: parseFloat(document.getElementById("newCostPerItem").value) || 0,
-        salePrice: parseFloat(document.getElementById("newItemSalePrice").value) || 0
+        productVersion: Number.parseInt(document.getElementById("newItemProductVersion").value, 10) || 0,
+        costPerItem: Number(document.getElementById("newCostPerItem").value) || 0,
+        salePrice: Number(document.getElementById("newItemSalePrice").value) || 0
     };
+}
 
-    // Load current list from localStorage
-    let items = JSON.parse(localStorage.getItem("items")) || [];
+// Function 1: Save the item to localStorage.
+function saveItemToLocalStorage(item) {
+    const items = JSON.parse(localStorage.getItem("items")) || [];
 
-    // Add this new item
-    items.push(item);
-
-    // Save back to localStorage
-    localStorage.setItem("items", JSON.stringify(items));
-
-    // Clear form if checkbox is checked
-    if (document.getElementById("newItemClearAfterSubmit").checked) {
-        newItemForm.reset();
+    // Prevent duplicate SKUs.
+    if (items.some(existingItem => existingItem.sku === item.sku)) {
+        throw new Error("An item with this SKU already exists.");
     }
 
-    // Build GET query string for confirmation page
-    const query = new URLSearchParams(item).toString();
+    items.push(item);
+    localStorage.setItem("items", JSON.stringify(items));
 
-    // Redirect to confirmation page
-    window.location.href = "confirm.html?" + query;
+    return item;
+}
+
+// Function 2: Send the item to a backend that updates items.json. Backend project. When using the deployed site change the fetch to the correct render address
+async function addItemToJson(item) {
+    const response = await fetch("http://localhost:3000/api/items", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(item)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.error || "Failed to update items.json.");
+    }
+
+    return result;
+}
+
+
+// Submit handler: save locally first, then optionally update JSON.
+newItemForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const item = buildNewItem();
+
+    try {
+        // Always save locally first.
+        saveItemToLocalStorage(item);
+
+        // Only update items.json when enabled.
+        if (SAVE_TO_JSON) {
+            try {
+                await addItemToJson(item);
+            } catch (error) {
+                console.error("JSON update failed:", error);
+                alert(
+                    "The item was saved locally, but the server update failed."
+                );
+                return;
+            }
+        }
+
+        // Clear the form if requested.
+        if (
+            document.getElementById("newItemClearAfterSubmit").checked
+        ) {
+            newItemForm.reset();
+        }
+
+        // Send item information to the confirmation page.
+        const query = new URLSearchParams(item).toString();
+        window.location.href = "confirm.html?" + query;
+
+    } catch (error) {
+        alert(error.message);
+    }
 });
+
 
 // ***LPN receiving***
 

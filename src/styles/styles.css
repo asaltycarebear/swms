@@ -94,7 +94,7 @@ footer {
   font-size: 0.9rem;
 }
 
-/* Table css start, used on 2 pages, so I put it here. */
+/* Table css start, used on multiple pages, so I put it here. */
 .table-container {
   overflow-x: auto; /* enables horizontal scrolling */
   width: 100%; /* container takes full width */

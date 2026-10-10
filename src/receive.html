@@ -1,40 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Garrett Stockwell">
-    
-    <!--Update--><meta name="description" content="Receive inventory, add new items, and manage stock details in the Stockwell Inventory system.">
-    <!--Update--><title>Stockwell Inventory – Receive & Add Items</title>
-    
-     <!--Update (facebook)--><meta property="og:title" content="Stockwell Inventory – Receive & Add Items">
-     <!--Update (facebook)--><meta property="og:description" content="Use this page to receive new inventory and create new item records in the Stockwell Inventory system.">
-     <!--Update (facebook)--><meta property="og:image" content="https://asaltycarebear.github.io/wdd231/images/profile.jpg">
-     <!--Update (facebook)--><meta property="og:url" content="https://asaltycarebear.github.io/wdd231/receive.html">
-    <!--Keep--><meta property="og:type" content="website">
-    
-    <!--Update--> <link rel="stylesheet" href="styles/styles.css">
-    <!--Update--> <link rel="stylesheet" href="styles/styles-large.css">
-    <!--Update (page css goes here)--><link rel="stylesheet" href="styles/receive.css">
-    
-    <!--Keep--> <script src="scripts/getdates.js" defer></script>
-    <!--Keep--> <script type="module" src="scripts/main.js"></script>
-    <!--Update (page script goes here)--> <script src="scripts/receive.js" defer></script>
+
+    <!--Update-->
+    <meta name="description"
+        content="Receive inventory, add new items, and manage stock details in the Stockwell Inventory system.">
+    <!--Update-->
+    <title>Stockwell Inventory – Receive & Add Items</title>
+
+    <!--Update (facebook)-->
+    <meta property="og:title" content="Stockwell Inventory – Receive & Add Items">
+    <!--Update (facebook)-->
+    <meta property="og:description"
+        content="Use this page to receive new inventory and create new item records in the Stockwell Inventory system.">
+    <!--Update (facebook)-->
+    <meta property="og:image" content="https://asaltycarebear.github.io/wdd231/images/profile.jpg">
+    <!--Update (facebook)-->
+    <meta property="og:url" content="https://asaltycarebear.github.io/wdd231/receive.html">
+    <!--Keep-->
+    <meta property="og:type" content="website">
+
+    <!--Update-->
+    <link rel="stylesheet" href="styles/styles.css">
+    <!--Update-->
+    <link rel="stylesheet" href="styles/styles-large.css">
+    <!--Update (page css goes here)-->
+    <link rel="stylesheet" href="styles/receive.css">
+
+    <!--Keep-->
+    <script type="module" src="/scripts/getdates.js" defer></script>
+    <!--Keep-->
+    <script type="module" src="/scripts/main.js"></script>
+    <!--Update (page script goes here)-->
+    <script type="module" src="/scripts/receive.js" defer></script>
 
     <link rel="icon" href="images/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <header id="header-main"></header>
-    
+
     <main>
 
         <div class="form-toggle">
-            <button id="showReceive">Receive Item</button>
-            <button id="showNewItem">New Item</button>
+            <button type="button" id="showReceive">Receive Item</button>
+            <button type="button" id="showNewItem">New Item</button>
         </div>
 
         <!-- Receive Form -->
@@ -45,13 +63,14 @@
             <input type="text" id="receiveSku" name="sku" placeholder="Enter SKU">
 
             <label for="receiveQuantity">Quantity:</label>
-            <input type="text" id="receiveQuantity" name="quantity" placeholder="Enter Quantity">   
+            <input type="text" id="receiveQuantity" name="quantity" placeholder="Enter Quantity">
 
             <label for="receiveBatchLot">Batch Lot:</label>
             <input type="text" id="receiveBatchLot" name="batchLot" placeholder="Batch Lot">
 
             <label for="receiveProductVersion">Product Version:</label>
-            <input type="number" id="receiveProductVersion" name="productVersion" placeholder="Version Number" min="0" step="1">
+            <input type="number" id="receiveProductVersion" name="productVersion" placeholder="Version Number" min="0"
+                step="1">
 
             <hr class="soft-divider">
 
@@ -98,7 +117,8 @@
             <input type="text" id="newItemBatchLot" name="batchLot" placeholder="Batch Lot">
 
             <label for="newItemProductVersion">Product Version:</label>
-            <input type="number" id="newItemProductVersion" name="productVersion" placeholder="Version Number" min="0" step="1">
+            <input type="number" id="newItemProductVersion" name="productVersion" placeholder="Version Number" min="0"
+                step="1">
 
             <hr class="soft-divider">
 
@@ -106,17 +126,19 @@
             <input type="number" id="newCostPerItem" name="costPerItem" placeholder="Cost" min="0" step="0.01">
 
             <label for="newItemSalePrice">Item Sale Price:</label>
-            <input type="number" id="newItemSalePrice" name="itemSalePrice" placeholder="Sale Price" min="0" step="0.01">
+            <input type="number" id="newItemSalePrice" name="itemSalePrice" placeholder="Sale Price" min="0"
+                step="0.01">
 
             <label for="newItemClearAfterSubmit">Clear Form on Submit:
                 <input type="checkbox" id="newItemClearAfterSubmit">
             </label>
-            
+
             <input type="submit" value="Create Item">
-            
+
         </form>
     </main>
 
     <footer id="footer-main"></footer>
 </body>
+
 </html>

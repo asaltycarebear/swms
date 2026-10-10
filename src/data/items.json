@@ -10,10 +10,9 @@
         "height": 0.2,
         "batchLot": "1",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0001.2",
         "description": "Medium Red Shirt",
@@ -25,10 +24,9 @@
         "height": 0.2,
         "batchLot": "1",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0001.3",
         "description": "Large Red Shirt",
@@ -40,11 +38,10 @@
         "height": 0.2,
         "batchLot": "1",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
-        {
+    {
         "sku": "0002.1",
         "description": "Small Blue Shirt",
         "make": "Factory",
@@ -55,10 +52,9 @@
         "height": 0.2,
         "batchLot": "1",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0002.2",
         "description": "Medium Blue Shirt",
@@ -70,10 +66,9 @@
         "height": 0.2,
         "batchLot": "1",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0002.3",
         "description": "Large Blue Shirt",
@@ -85,10 +80,9 @@
         "height": 0.2,
         "batchLot": "1",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0003.1",
         "description": "Small Green Shirt",
@@ -100,10 +94,9 @@
         "height": 0.2,
         "batchLot": "2",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0003.2",
         "description": "Medium Green Shirt",
@@ -115,10 +108,9 @@
         "height": 0.2,
         "batchLot": "2",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0003.3",
         "description": "Large Green Shirt",
@@ -130,10 +122,9 @@
         "height": 0.2,
         "batchLot": "2",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0004.1",
         "description": "Small Yellow Shirt",
@@ -145,10 +136,9 @@
         "height": 0.2,
         "batchLot": "3",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0004.2",
         "description": "Medium Yellow Shirt",
@@ -160,10 +150,9 @@
         "height": 0.2,
         "batchLot": "3",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0004.3",
         "description": "Large Yellow Shirt",
@@ -175,10 +164,9 @@
         "height": 0.2,
         "batchLot": "3",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0005.1",
         "description": "Small Black Shirt",
@@ -190,10 +178,9 @@
         "height": 0.2,
         "batchLot": "4",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0005.2",
         "description": "Medium Black Shirt",
@@ -205,10 +192,9 @@
         "height": 0.2,
         "batchLot": "4",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0005.3",
         "description": "Large Black Shirt",
@@ -220,10 +206,9 @@
         "height": 0.2,
         "batchLot": "4",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0006.1",
         "description": "Small White Shirt",
@@ -235,10 +220,9 @@
         "height": 0.2,
         "batchLot": "5",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0006.2",
         "description": "Medium White Shirt",
@@ -250,10 +234,9 @@
         "height": 0.2,
         "batchLot": "5",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0006.3",
         "description": "Large White Shirt",
@@ -265,10 +248,9 @@
         "height": 0.2,
         "batchLot": "5",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0007.1",
         "description": "Small Purple Shirt",
@@ -280,10 +262,9 @@
         "height": 0.2,
         "batchLot": "6",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0007.2",
         "description": "Medium Purple Shirt",
@@ -295,10 +276,9 @@
         "height": 0.2,
         "batchLot": "6",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0007.3",
         "description": "Large Purple Shirt",
@@ -310,7 +290,7 @@
         "height": 0.2,
         "batchLot": "6",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
     {
@@ -324,10 +304,9 @@
         "height": 0.2,
         "batchLot": "7",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0008.2",
         "description": "Medium Orange Shirt",
@@ -339,10 +318,9 @@
         "height": 0.2,
         "batchLot": "7",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
     },
-
     {
         "sku": "0008.3",
         "description": "Large Orange Shirt",
@@ -354,7 +332,21 @@
         "height": 0.2,
         "batchLot": "7",
         "productVersion": 1,
-        "costPerItem": 5.0,
+        "costPerItem": 5,
         "salePrice": 8.99
+    },
+    {
+        "sku": "test",
+        "description": "test",
+        "make": "test",
+        "model": "test",
+        "weight": 1,
+        "length": 1,
+        "width": 1,
+        "height": 1,
+        "batchLot": "1",
+        "productVersion": 1,
+        "costPerItem": 1,
+        "salePrice": 1
     }
 ]
