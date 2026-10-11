@@ -1,152 +1,293 @@
+// alternate version for local storage available
+// future update will include drop down filters
 
-
-document.addEventListener("DOMContentLoaded", async () => {
-    const tableBody = document.querySelector("#stocksummary tbody");
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.getElementById("stocksummary");
+    const tableBody = table?.querySelector("tbody");
     const modalContainer = document.getElementById("modalContainer");
-    // Load pallets from localStorage
-    const pallets = JSON.parse(localStorage.getItem("pallets")) || [];
 
-    if (pallets.length === 0) {
-        const row = document.createElement("tr");
-        const td = document.createElement("td");
-        td.colSpan = 15;
-        td.textContent = "No pallets received yet.";
-        td.style.textAlign = "center";
-        row.appendChild(td);
-        tableBody.appendChild(row);
-        return;
+    const loadButton = document.getElementById("loadTable");
+    const clearButton = document.getElementById("clearTable");
+    const exportButton = document.getElementById("exportCSV");
+    const clearAfterExport = document.getElementById("clearAfterExport");
+
+    // Load JSON files.
+    async function loadJSONData() {
+        const [locationsResponse, lpnsResponse, itemsResponse] =
+            await Promise.all([
+                fetch("/data/location.json"),
+                fetch("/data/lpn.json"),
+                fetch("/data/items.json")
+            ]);
+
+        if (
+            !locationsResponse.ok ||
+            !lpnsResponse.ok ||
+            !itemsResponse.ok
+        ) {
+            throw new Error(
+                "Could not load location.json, lpn.json, or items.json."
+            );
+        }
+
+        const [locations, lpns, items] = await Promise.all([
+            locationsResponse.json(),
+            lpnsResponse.json(),
+            itemsResponse.json()
+        ]);
+
+        return { locations, lpns, items };
     }
 
-    // Table row creation. LPN creating happen in receive.js and uses todays date + a sequence
-    pallets.forEach(pallet => {
-        const row = document.createElement("tr");
+    // Find an LPN using its ID.
+    function findLPN(lpns, lpnId) {
+        return lpns.find(
+            (record) =>
+                String(record.id).trim() === String(lpnId).trim()
+        );
+    }
 
-        row.innerHTML = `
-            <td class="lpn-click" data-lpn="${pallet.lpn}">${pallet.lpn}</td>
-            <td>${pallet.sku}</td>
-            <td>${pallet.location}</td>
-            <td>${pallet.quantity}</td>
-            <td class="noMobile">${pallet.batchLot}</td>
-            <td class="noMobile">${pallet.productVersion}</td>
-            <td class="noMobile">${pallet.description}</td>
-            <td class="noMobile">${pallet.make}</td>
-            <td class="noMobile">${pallet.model}</td>
-            <td class="noMobile">${pallet.weight}</td>
-            <td class="noMobile">${pallet.length}</td>
-            <td class="noMobile">${pallet.width}</td>
-            <td class="noMobile">${pallet.height}</td>
-            <td class="noMobile">${pallet.costPerItem}</td>
-            <td class="noMobile">${pallet.salePrice}</td>
-        `;
+    // Get value from LPN field that can be stored as an array.
+    function getLPNValue(record, field) {
+        const value = record?.[field];
+        return Array.isArray(value) ? value[0] : value;
+    }
 
-        tableBody.appendChild(row);
+    // Find item matching the SKU and product version.
+    function findItem(items, sku, version) {
+        return items.find((item) => {
+            const itemSKU = item.sku ?? item.SKU;
+            const itemVersion =
+                item.productVersion ?? item["product version"];
 
-        // Add click listener to LPN cell
-        row.querySelector(".lpn-click").addEventListener("click", () => {
-            openModal(pallet);
+            return (
+                String(itemSKU).trim() === String(sku).trim() &&
+                String(itemVersion) === String(version)
+            );
         });
-    });
+    }
 
-    // Modal builder (This is where the API is used)
+    // Add table cell safely.
+    function addCell(row, value, className = "") {
+        const cell = document.createElement("td");
+
+        cell.textContent = value ?? "";
+
+        if (className) {
+            cell.className = className;
+        }
+
+        row.appendChild(cell);
+    }
+
+    // Load and populate the stock summary table.
+    async function populateTable() {
+        if (!tableBody) {
+            alert('Could not find the table body for "stocksummary".');
+            return;
+        }
+
+        loadButton.disabled = true;
+
+        try {
+            const { locations, lpns, items } = await loadJSONData();
+
+            // Clear existing rows before loading fresh data. Trust...this was annoying...I miss SQL
+            tableBody.replaceChildren();
+
+            let rowCount = 0;
+
+            // when LOCATION is the starting point.
+            locations.forEach((location) => {
+                // Each location contains an array of assigned LPN IDs.
+                const locationLPNs = Array.isArray(location.LPN)
+                    ? location.LPN
+                    : [];
+
+                locationLPNs.forEach((lpnId) => {
+                    // Foreign key: find the LPN assigned to this location. thank you SQL for the nomenclature
+                    const lpn = findLPN(lpns, lpnId);
+
+                    if (!lpn) {
+                        console.warn(`LPN ${lpnId} was not found in lpn.json.`);
+                        return;
+                    }
+
+                    // Foreign key: get the SKU from the LPN.
+                    const sku = getLPNValue(lpn, "SKU");
+                    const productVersion = getLPNValue(
+                        lpn,
+                        "product version"
+                    );
+
+                    // Find the product details using SKU + version.
+                    const item = findItem(items, sku, productVersion);
+
+                    if (!item) {
+                        console.warn(
+                            `Item not found for SKU ${sku}, version ${productVersion}.`
+                        );
+                    }
+
+                    const quantity =
+                        Number(getLPNValue(lpn, "quantity")) || 0;
+
+                    const itemWeight = Number(item?.weight) || 0;
+                    const totalWeight = Math.ceil(itemWeight * quantity);
+
+                    const row = document.createElement("tr");
+
+                    // LPN details + location name + item details.
+                    addCell(row, lpn.id, "lpn-click");
+                    addCell(row, sku);
+                    addCell(row, location.name);
+                    addCell(row, quantity);
+                    addCell(row, getLPNValue(lpn, "batch lots"), "noMobile");
+                    addCell(row, productVersion, "noMobile");
+                    addCell(row, item?.description, "noMobile");
+                    addCell(row, item?.make, "noMobile");
+                    addCell(row, item?.model, "noMobile");
+                    addCell(row, totalWeight, "noMobile");
+                    addCell(row, item?.length, "noMobile");
+                    addCell(row, item?.width, "noMobile");
+                    addCell(row, item?.height, "noMobile");
+                    addCell(row, item?.costPerItem, "noMobile");
+                    addCell(row, item?.salePrice, "noMobile");
+
+                    tableBody.appendChild(row);
+
+                    // Open the modal when the LPN cell is clicked.
+                    row.querySelector(".lpn-click").addEventListener("click", () => {
+                        openModal({
+                            lpn: lpn.id,
+                            sku,
+                            quantity,
+                            batchLot: getLPNValue(lpn, "batch lots"),
+                            productVersion,
+                            weight: itemWeight,
+                            totalWeight
+                        });
+                    });
+
+                    rowCount++;
+                });
+            });
+
+            if (rowCount === 0) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 15;
+                cell.textContent = "No LPNs are assigned to any locations.";
+                cell.style.textAlign = "center";
+
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+            }
+        } catch (error) {
+            console.error("Error populating stock summary:", error);
+            alert(`Unable to load the stock summary: ${error.message}`);
+        } finally {
+            loadButton.disabled = false;
+        }
+    }
+
+    // Modal builder
     function openModal(pallet) {
-        const totalWeight = (pallet.weight || 0) * (pallet.quantity || 0);
+        const totalWeight = pallet.totalWeight;
 
         modalContainer.innerHTML = `
-            <div class="modal-overlay"></div>
+        <div class="modal-overlay"></div>
 
-            <div class="modal-box">
-                <button class="modal-close">✖</button>
+        <div class="modal-box">
+            <button class="modal-close" type="button">✖</button>
 
-                <div class="modal-content">
-                    <p><strong>LPN:</strong> ${pallet.lpn}</p>
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pallet.lpn)}" alt="LPN Code">
+            <div class="modal-content">
+                <p><strong>LPN:</strong> ${pallet.lpn}</p>
+                <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pallet.lpn)}"
+                    alt="LPN Code"
+                >
 
-                    <p><strong>SKU:</strong> ${pallet.sku}</p>
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pallet.sku)}" alt="SKU Code">
+                <p><strong>SKU:</strong> ${pallet.sku}</p>
+                <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pallet.sku)}"
+                    alt="SKU Code"
+                >
 
-                    <p><strong>Quantity:</strong> ${pallet.quantity}</p>
-                    <p><strong>Batch + Version:</strong> ${pallet.batchLot}-${pallet.productVersion}</p>
-                    <p><strong>Total Weight:</strong> ${totalWeight}</p>
-                </div>
+                <p><strong>Quantity:</strong> ${pallet.quantity}</p>
+                <p><strong>Batch + Version:</strong> ${pallet.batchLot}-${pallet.productVersion}</p>
+                <p><strong>Item Weight:</strong> ${pallet.weight}</p>
+                <p><strong>Total Weight:</strong> ${totalWeight}</p>
             </div>
-        `;
+        </div>
+    `;
 
-        document.querySelector(".modal-close").addEventListener("click", closeModal);
-        document.querySelector(".modal-overlay").addEventListener("click", closeModal);
+        modalContainer.querySelector(".modal-close")
+            .addEventListener("click", closeModal);
+
+        modalContainer.querySelector(".modal-overlay")
+            .addEventListener("click", closeModal);
     }
 
     function closeModal() {
         modalContainer.innerHTML = "";
     }
-});
 
-// Convert table to CSV
-function tableToCSV(tableId) {
-    const table = document.getElementById(tableId);
-    let csv = [];
-
-    for (let row of table.rows) {
-        let cells = Array.from(row.cells).map(cell => `${cell.textContent.trim()}`);
-        csv.push(cells.join(`,`));
-    }
-    return csv.join(`\n`);
-}
-
-// Export CSV function
-function exportTable(tableId, clearAfter) {
-    const csvData = tableToCSV(tableId);
-
-    // Temp download link
-    const blob = new Blob([csvData], { type: `text/csv` });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement(`a`);
-    a.href = url;
-    a.download = `stock_summary.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    // Clear table and storage when checked
-    if (clearAfter) {
-        localStorage.removeItem(`pallets`);
-        const table = document.getElementById(tableId);
-        while (table.rows.length > 1) { // KEEP HEADER ROW!!!!
-            table.deleteRow(1);
+    // Clear the displayed rows without deleting JSON data.
+    function clearTable() {
+        if (tableBody) {
+            tableBody.replaceChildren();
         }
     }
 
-    // Always uncheck the box, only note out on customer request. Very scary. To be fair, if you don't un
-    const checkbox = document.getElementById(`clearAfterExport`);
-    if (checkbox) checkbox.checked = false;
-}
+    // Convert the table to CSV. This is for spreadsheet primary users. I need to work on using local storage as well as json files for redundancy
+    function tableToCSV() {
+        if (!table) return "";
 
-
-// Clear Table
-function clearTable(tableId) {
-    localStorage.removeItem(`pallets`);
-    const table = document.getElementById(tableId);
-    while (table.rows.length > 1) { // KEEP HEADER ROW!!!!
-        table.deleteRow(1);
+        return Array.from(table.rows)
+            .map((row) =>
+                Array.from(row.cells)
+                    .map((cell) => {
+                        const value = cell.textContent.trim();
+                        return `"${value.replace(/"/g, '""')}"`;
+                    })
+                    .join(",")
+            )
+            .join("\r\n");
     }
-}
 
-// Event listener for both export and clearing
-document.addEventListener("DOMContentLoaded", () => {
-    const exportButton = document.getElementById(`exportCSV`);
-    if (exportButton) {
-        exportButton.addEventListener("click", () => {
-            const clearAfter = document.getElementById(`clearAfterExport`).checked;
-            exportTable(`stocksummary`, clearAfter);
+    // Export the table to a CSV file.
+    function exportCSV() {
+        if (!table || !tableBody || tableBody.rows.length === 0) {
+            alert("Load the table before exporting.");
+            return;
+        }
+
+        const csv = tableToCSV();
+        const blob = new Blob([csv], {
+            type: "text/csv;charset=utf-8;"
         });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "stock_summary.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        if (clearAfterExport?.checked) {
+            clearTable();
+            clearAfterExport.checked = false;
+        }
     }
 
-    const clearButton = document.getElementById(`clearTable`); // Need to learn how to center this popup
-    if (clearButton) {
-        clearButton.addEventListener("click", () => {
-            if (confirm(`Are you sure you want to clear the table?\n!!!!!!!!!!!!\nThis action cannot be undone.`)) {
-                clearTable(`stocksummary`);
-            }
-        });
-    }
+    // The buttons!
+    loadButton?.addEventListener("click", populateTable);
+    clearButton?.addEventListener("click", clearTable);
+    exportButton?.addEventListener("click", exportCSV);
 });
-
