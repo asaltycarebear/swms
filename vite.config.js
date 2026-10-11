@@ -5,6 +5,10 @@ import { resolve } from "path";
 export default defineConfig({
     root: resolve(__dirname, "src"),
 
+    preview: {
+        allowedHosts: ["swms-0iyt.onrender.com"],
+    },
+
     build: {
         outDir: resolve(__dirname, "dist"),
         emptyOutDir: true,
