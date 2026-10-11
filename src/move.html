@@ -31,7 +31,22 @@
     <header id="header-main"></header>
     
     <main>
-        Needs to identify if lpn is on local storage and update location, or create new row just to update for csv and json
+        <section class="move-container">
+            <h2>Move LPN</h2>
+            <p>Enter an LPN and the name of its destination location.</p>
+    
+            <form id="moveForm">
+                <label for="lpnInput">LPN Number</label>
+                <input type="text" id="lpnInput" name="lpn" placeholder="Enter LPN number" required>
+    
+                <label for="locationInput">New Location</label>
+                <input type="text" id="locationInput" name="location" placeholder="Enter location name" required>
+    
+                <button type="submit" id="moveButton">Move LPN</button>
+            </form>
+    
+            <p id="moveMessage" role="status" aria-live="polite"></p>
+        </section>
     </main>
 
         <footer id="footer-main"></footer>

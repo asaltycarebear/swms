@@ -7,5 +7,24 @@
         "product version": [],
         "batch lots": [],
         "weight": ""
+    },
+    {
+        "id": "10102026001",
+        "SKU": [
+            "0001.2"
+        ],
+        "quantity": [
+            100
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 55.00000000000001
     }
 ]

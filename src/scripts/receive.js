@@ -132,94 +132,266 @@ newItemForm.addEventListener("submit", async function (event) {
 // ***LPN receiving***
 
 // Receive Form submit handler
-receiveForm.addEventListener("submit", async function (event) { // <<<<<< async decleration
+// receiveForm.addEventListener("submit", async function (event) { // <<<<<< async decleration
+//     event.preventDefault();
+
+//     // Get form values
+//     const sku = document.getElementById("receiveSku").value.trim();
+//     const quantity = parseInt(document.getElementById("receiveQuantity").value) || 0;
+//     const batchLot = document.getElementById("receiveBatchLot").value.trim();
+//     const version = parseInt(document.getElementById("receiveProductVersion").value) || 0;
+
+//     // Load items.json
+//     let items = [];
+//     try {
+//         const res = await fetch("data/items.json");
+//         if (!res.ok) throw new Error("Cannot load items.json");
+//         items = await res.json();
+//     } catch (err) {
+//         alert("Error fetching items.json: " + err.message);
+//         return;
+//     }
+
+//     // Find matching item by SKU + productVersion
+//     const matchedItem = items.find(i => i.sku === sku && i.productVersion == version);
+//     if (!matchedItem) {
+//         alert("No item matches this SKU + Product Version.");
+//         return;
+//     }
+
+//     // Generate LPN: MMDDYYYY + 3-digit sequence
+//     const today = new Date();
+//     const mm = String(today.getMonth() + 1).padStart(2, "0");
+//     const dd = String(today.getDate()).padStart(2, "0");
+//     const yyyy = today.getFullYear();
+//     const datePrefix = `${mm}${dd}${yyyy}`;
+
+//     let lastSeq = JSON.parse(localStorage.getItem("lpnSequence")) || { date: "", seq: 0 };
+//     if (lastSeq.date === datePrefix) {
+//         lastSeq.seq += 1;
+//     } else {
+//         lastSeq.date = datePrefix;
+//         lastSeq.seq = 1;
+//     }
+
+//     const lpn = `${datePrefix}${String(lastSeq.seq).padStart(3, "0")}`;
+//     localStorage.setItem("lpnSequence", JSON.stringify(lastSeq));
+
+//     // Build pallet object (include matched item fields for display on summary)
+//     const newPallet = {
+//         lpn,
+//         sku,
+//         location: "Receiving",
+//         quantity,
+//         batchLot,
+//         productVersion: version,
+//         description: matchedItem.description,
+//         make: matchedItem.make,
+//         model: matchedItem.model,
+//         weight: matchedItem.weight,
+//         length: matchedItem.length,
+//         width: matchedItem.width,
+//         height: matchedItem.height,
+//         costPerItem: matchedItem.costPerItem,
+//         salePrice: matchedItem.salePrice
+//     };
+
+//     // Save to localStorage
+//     const pallets = JSON.parse(localStorage.getItem("pallets")) || [];
+//     pallets.push(newPallet);
+//     localStorage.setItem("pallets", JSON.stringify(pallets));
+
+//         // Clear form if checkbox checked HOWEVER with a confirmation page this become unnessesary. I want to leave it as an option. 
+//         // In the future I would rather have a whole list of recent received lpn's to be shown after the session is done, 
+//         // but for this assignment I am using a confirmation page.
+//     if (document.getElementById("receiveClearAfterSubmit").checked) {
+//         receiveForm.reset();
+//     }
+
+//     // Build query string for confirmation page and redirect
+//     const formData = {
+//         lpn,
+//         sku,
+//         quantity,
+//         batchLot,
+//         productVersion: version
+//     };
+//     const query = new URLSearchParams(formData).toString();
+//     window.location.href = "confirm.html?" + query;
+// });
+
+// Receive Form submit handler
+receiveForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     // Get form values
     const sku = document.getElementById("receiveSku").value.trim();
-    const quantity = parseInt(document.getElementById("receiveQuantity").value) || 0;
+    const quantity = Number.parseInt(
+        document.getElementById("receiveQuantity").value,
+        10
+    );
     const batchLot = document.getElementById("receiveBatchLot").value.trim();
-    const version = parseInt(document.getElementById("receiveProductVersion").value) || 0;
+    const version = Number.parseInt(
+        document.getElementById("receiveProductVersion").value,
+        10
+    );
 
-    // Load items.json
+    // Validate form values
+    if (
+        !sku ||
+        !batchLot ||
+        !Number.isInteger(quantity) ||
+        quantity <= 0 ||
+        !Number.isInteger(version) ||
+        version < 0
+    ) {
+        alert("Please enter a valid SKU, quantity, batch lot, and product version.");
+        return;
+    }
+
+    // Load items.json only
     let items = [];
+
     try {
-        const res = await fetch("data/items.json");
-        if (!res.ok) throw new Error("Cannot load items.json");
-        items = await res.json();
-    } catch (err) {
-        alert("Error fetching items.json: " + err.message);
+        const response = await fetch("/data/items.json");
+
+        if (!response.ok) {
+            throw new Error("Cannot load items.json.");
+        }
+
+        items = await response.json();
+    } catch (error) {
+        alert("Error loading items.json: " + error.message);
         return;
     }
 
-    // Find matching item by SKU + productVersion
-    const matchedItem = items.find(i => i.sku === sku && i.productVersion == version);
+    // Find matching item by SKU and product version
+    const matchedItem = items.find(
+        item =>
+            item.sku === sku &&
+            Number(item.productVersion) === version
+    );
+
     if (!matchedItem) {
-        alert("No item matches this SKU + Product Version.");
+        alert(
+            "This SKU and Product Version do not exist in items.json. " +
+            "Please enter an existing item. Or add a New Item if it is the first time you have recived this SKU"
+        );
         return;
     }
+
+    // Calculate total pallet weight
+    const itemWeight = Number(matchedItem.weight);
+
+    if (!Number.isFinite(itemWeight) || itemWeight < 0) {
+        alert("The item's weight is invalid.");
+        return;
+    }
+
+    const totalWeight = itemWeight * quantity;
 
     // Generate LPN: MMDDYYYY + 3-digit sequence
     const today = new Date();
     const mm = String(today.getMonth() + 1).padStart(2, "0");
     const dd = String(today.getDate()).padStart(2, "0");
     const yyyy = today.getFullYear();
+
     const datePrefix = `${mm}${dd}${yyyy}`;
 
-    let lastSeq = JSON.parse(localStorage.getItem("lpnSequence")) || { date: "", seq: 0 };
-    if (lastSeq.date === datePrefix) {
-        lastSeq.seq += 1;
-    } else {
-        lastSeq.date = datePrefix;
-        lastSeq.seq = 1;
-    }
+    const lastSeq = JSON.parse(
+        localStorage.getItem("lpnSequence")
+    ) || { date: "", seq: 0 };
 
-    const lpn = `${datePrefix}${String(lastSeq.seq).padStart(3, "0")}`;
-    localStorage.setItem("lpnSequence", JSON.stringify(lastSeq));
+    const nextSeq =
+        lastSeq.date === datePrefix ? lastSeq.seq + 1 : 1;
 
-    // Build pallet object (include matched item fields for display on summary)
-    const newPallet = {
-        lpn,
-        sku,
-        location: "Receiving",
-        quantity,
-        batchLot,
-        productVersion: version,
-        description: matchedItem.description,
-        make: matchedItem.make,
-        model: matchedItem.model,
-        weight: matchedItem.weight,
-        length: matchedItem.length,
-        width: matchedItem.width,
-        height: matchedItem.height,
-        costPerItem: matchedItem.costPerItem,
-        salePrice: matchedItem.salePrice
+    const lpn = `${datePrefix}${String(nextSeq).padStart(3, "0")}`;
+
+    // Build the LPN record for lpn.json
+    const newLpn = {
+        id: lpn,
+        SKU: [sku],
+        quantity: [quantity],
+        "quantity type": ["Each"],
+        "product version": [version],
+        "batch lots": [batchLot],
+        weight: totalWeight
     };
 
-    // Save to localStorage
-    const pallets = JSON.parse(localStorage.getItem("pallets")) || [];
-    pallets.push(newPallet);
-    localStorage.setItem("pallets", JSON.stringify(pallets));
+    // Send the LPN to the backend
+    try {
+        const response = await fetch("http://localhost:3000/api/lpns", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newLpn)
+        });
 
-        // Clear form if checkbox checked HOWEVER with a confirmation page this become unnessesary. I want to leave it as an option. 
-        // In the future I would rather have a whole list of recent received lpn's to be shown after the session is done, 
-        // but for this assignment I am using a confirmation page.
-    if (document.getElementById("receiveClearAfterSubmit").checked) {
-        receiveForm.reset();
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Failed to save LPN.");
+        }
+
+        // Build pallet object for the rest of the app
+        const newPallet = {
+            lpn,
+            sku,
+            location: "Receiving",
+            quantity,
+            batchLot,
+            productVersion: version,
+            description: matchedItem.description,
+            make: matchedItem.make,
+            model: matchedItem.model,
+            weight: totalWeight,
+            itemWeight,
+            length: matchedItem.length,
+            width: matchedItem.width,
+            height: matchedItem.height,
+            costPerItem: matchedItem.costPerItem,
+            salePrice: matchedItem.salePrice
+        };
+
+        // Save pallet details locally for existing app pages
+        const pallets = JSON.parse(localStorage.getItem("pallets")) || [];
+        pallets.push(newPallet);
+        localStorage.setItem("pallets", JSON.stringify(pallets));
+
+        // Save sequence only after the backend accepts the LPN
+        localStorage.setItem(
+            "lpnSequence",
+            JSON.stringify({ date: datePrefix, seq: nextSeq })
+        );
+
+        // Optionally keep a local copy of the LPN records
+        const lpns = JSON.parse(localStorage.getItem("lpns")) || [];
+        lpns.push(newLpn);
+        localStorage.setItem("lpns", JSON.stringify(lpns));
+
+        // Clear form if requested
+        if (document.getElementById("receiveClearAfterSubmit").checked) {
+            receiveForm.reset();
+        }
+
+        // Redirect to confirmation page
+        const formData = {
+            lpn,
+            sku,
+            quantity,
+            batchLot,
+            productVersion: version,
+            weight: totalWeight
+        };
+
+        const query = new URLSearchParams(formData).toString();
+        window.location.href = "/confirm.html?" + query;
+
+    } catch (error) {
+        console.error("LPN save failed:", error);
+        alert("Could not save the received pallet: " + error.message);
     }
-
-    // Build query string for confirmation page and redirect
-    const formData = {
-        lpn,
-        sku,
-        quantity,
-        batchLot,
-        productVersion: version
-    };
-    const query = new URLSearchParams(formData).toString();
-    window.location.href = "confirm.html?" + query;
 });
-
-
 
 
