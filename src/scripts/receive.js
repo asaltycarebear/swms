@@ -69,9 +69,31 @@ function saveItemToLocalStorage(item) {
     return item;
 }
 
-// Function 2: Send the item to a backend that updates items.json. Backend project. When using the deployed site change the fetch to the correct render address
+// Function 2: Send the item to a backend that updates items.json. Backend project. When using the deployed site change the fetch to the correct render address.
+//First version is for local host only
+// async function addItemToJson(item) {
+//     const response = await fetch("http://localhost:3000/api/items", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(item)
+//     });
+
+//     const result = await response.json();
+
+//     if (!response.ok) {
+//         throw new Error(result.error || "Failed to update items.json.");
+//     }
+
+//     return result;
+// }
+const API_BASE_URL = import.meta.env.DEV
+    ? "http://localhost:3000"
+    : "https://swms-0iyt.onrender.com";
+
 async function addItemToJson(item) {
-    const response = await fetch("http://localhost:3000/api/items", {
+    const response = await fetch(`${API_BASE_URL}/api/items`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -87,6 +109,7 @@ async function addItemToJson(item) {
 
     return result;
 }
+
 
 
 // Submit handler: save locally first, then optionally update JSON.
