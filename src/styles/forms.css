@@ -1,0 +1,18 @@
+form {
+    background-color: var(--accent2-color);
+    font-family: var(--body-font);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 10% auto;
+}
+
+.soft-divider {
+    border: none;
+    height: 1px;
+    background-color: var(--accent1-color);
+    opacity: 0.5;
+    margin: 1rem 0;
+}
