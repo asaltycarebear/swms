@@ -1,6 +1,15 @@
 // alternate version for local storage available
 // future update will include drop down filters
 
+const API_BASE_URL = import.meta.env.DEV
+    ? "http://localhost:3000"
+    : "";
+
+function apiUrl(endpoint) {
+    return `${API_BASE_URL}${endpoint}`;
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const table = document.getElementById("stocksummary");
     const tableBody = table?.querySelector("tbody");
@@ -15,9 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadJSONData() {
         const [locationsResponse, lpnsResponse, itemsResponse] =
             await Promise.all([
-                fetch("/data/location.json"),
-                fetch("/data/lpn.json"),
-                fetch("/data/items.json")
+                fetch(apiUrl("/api/locations")),
+                fetch(apiUrl("/api/lpns")),
+                fetch(apiUrl("/api/items"))
             ]);
 
         if (
@@ -38,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return { locations, lpns, items };
     }
+
 
     // Find an LPN using its ID.
     function findLPN(lpns, lpnId) {

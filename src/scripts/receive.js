@@ -1,3 +1,13 @@
+
+const API_BASE_URL = import.meta.env.DEV
+    ? "http://localhost:3000"
+    : "";
+
+function apiUrl(endpoint) {
+    return `${API_BASE_URL}${endpoint}`;
+}
+
+
 // *** Buttons for toggling forms ***
 
 const showReceiveBtn = document.getElementById("showReceive");
@@ -54,7 +64,7 @@ function buildNewItem() {
     };
 }
 
-// Function 1: Save the item to localStorage.
+// Save the item to localStorage.
 function saveItemToLocalStorage(item) {
     const items = JSON.parse(localStorage.getItem("items")) || [];
 
@@ -69,28 +79,13 @@ function saveItemToLocalStorage(item) {
     return item;
 }
 
-// Function 2: Send the item to a backend that updates items.json. Backend project. When using the deployed site change the fetch to the correct render address.
-//First version is for local host only
-// async function addItemToJson(item) {
-//     const response = await fetch("http://localhost:3000/api/items", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(item)
-//     });
-
-//     const result = await response.json();
-
-//     if (!response.ok) {
-//         throw new Error(result.error || "Failed to update items.json.");
-//     }
-
-//     return result;
-// }
-const API_BASE_URL = import.meta.env.DEV
-    ? "http://localhost:3000"
-    : "https://swms-0iyt.onrender.com";
+const response = await fetch(apiUrl("/api/items"), {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(item)
+});
 
 async function addItemToJson(item) {
     const response = await fetch(`${API_BASE_URL}/api/items`, {
@@ -276,7 +271,7 @@ receiveForm.addEventListener("submit", async function (event) {
     let items = [];
 
     try {
-        const response = await fetch("/data/items.json");
+        const response = await fetch(apiUrl("/api/items"));
 
         if (!response.ok) {
             throw new Error("Cannot load items.json.");
@@ -343,7 +338,7 @@ receiveForm.addEventListener("submit", async function (event) {
 
     // Send the LPN to the backend
     try {
-        const response = await fetch("http://localhost:3000/api/lpns", {
+        const response = await fetch(apiUrl("/api/lpns"), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

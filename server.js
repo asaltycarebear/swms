@@ -6,22 +6,105 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cors from "cors";
+import os from "node:os";
+
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const itemsFile = path.join(__dirname, "src", "data", "items.json");
-const lpnsFile = path.join(__dirname, "src", "data", "lpn.json");
-const locationsFile = path.join(__dirname, "src", "data", "location.json");
+// Local development uses src/data.
+// Render can use a persistent disk mounted at /var/data.
+// Original JSON files committed to the repository.
+const SOURCE_DATA_DIR = path.join(__dirname, "src", "data");
+
+// Temporary, writable demo data.
+// DATA_DIR can be overridden with an environment variable.
+const DATA_DIR =
+    process.env.DATA_DIR || path.join(os.tmpdir(), "swms-demo-data");
+
+const itemsFile = path.join(DATA_DIR, "items.json");
+const lpnsFile = path.join(DATA_DIR, "lpn.json");
+const locationsFile = path.join(DATA_DIR, "location.json");
 
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ]
 }));
 
 app.use(express.json());
+
+// Read a JSON file and return its contents.
+async function readJsonFile(filePath) {
+    const contents = await fs.readFile(filePath, "utf8");
+    return JSON.parse(contents);
+}
+
+// Save an updated JSON array.
+async function writeJsonFile(filePath, data) {
+    await fs.writeFile(
+        filePath,
+        JSON.stringify(data, null, 4) + "\n",
+        "utf8"
+    );
+}
+
+async function initializeDataFiles() {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+
+    const files = [
+        "items.json",
+        "lpn.json",
+        "location.json",
+    ];
+
+    for (const filename of files) {
+        const destination = path.join(DATA_DIR, filename);
+
+        try {
+            await fs.access(destination);
+        } catch {
+            const source = path.join(SOURCE_DATA_DIR, filename);
+
+            await fs.copyFile(source, destination);
+
+            console.log(`Initialized ${filename}`);
+        }
+    }
+}
+
+//GET endpoints
+app.get("/api/items", async (req, res) => {
+    try {
+        res.json(await readJsonFile(itemsFile));
+    } catch (error) {
+        console.error("Failed to read items.json:", error);
+        res.status(500).json({ error: "Could not read items." });
+    }
+});
+
+app.get("/api/lpns", async (req, res) => {
+    try {
+        res.json(await readJsonFile(lpnsFile));
+    } catch (error) {
+        console.error("Failed to read lpn.json:", error);
+        res.status(500).json({ error: "Could not read LPNs." });
+    }
+});
+
+app.get("/api/locations", async (req, res) => {
+    try {
+        res.json(await readJsonFile(locationsFile));
+    } catch (error) {
+        console.error("Failed to read location.json:", error);
+        res.status(500).json({ error: "Could not read locations." });
+    }
+});
+
 
 // POST /api/items - add a new item to items.json
 app.post("/api/items", async (req, res) => {
@@ -266,6 +349,19 @@ app.post("/api/move-lpn", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Inventory API running at http://localhost:${PORT}`);
-});
+// Serve the built Vite frontend.
+const distDirectory = path.join(__dirname, "dist");
+
+app.use(express.static(distDirectory));
+
+// Initialize the demo data before accepting requests.
+initializeDataFiles()
+    .then(() => {
+        app.listen(PORT, "0.0.0.0", () => {
+            console.log(`SWMS server running on port ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error("Failed to initialize demo data:", error);
+        process.exit(1);
+    });
