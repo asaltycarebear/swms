@@ -210,28 +210,51 @@ receiveForm.addEventListener("submit", async function (event) {
 
     const datePrefix = `${mm}${dd}${yyyy}`;
 
-    const lastSeq = JSON.parse(
-        localStorage.getItem("lpnSequence")
-    ) || { date: "", seq: 0 };
-
-    const nextSeq =
-        lastSeq.date === datePrefix ? lastSeq.seq + 1 : 1;
-
-    const lpn = `${datePrefix}${String(nextSeq).padStart(3, "0")}`;
-
-    // Build the LPN record for lpn.json
-    const newLpn = {
-        id: lpn,
-        SKU: [sku],
-        quantity: [quantity],
-        "quantity type": ["Each"],
-        "product version": [version],
-        "batch lots": [batchLot],
-        weight: totalWeight
-    };
-
     // Send the LPN to the backend
+    let lpnCreated = false;
+    let lpn;
+
     try {
+        const existingLpnsResponse = await fetch("/api/lpns");
+
+        if (!existingLpnsResponse.ok) {
+            throw new Error("Cannot load existing LPNs.");
+        }
+
+        const existingLpns = await existingLpnsResponse.json();
+        const lastServerSeq = existingLpns.reduce((maxSeq, existingLpn) => {
+            const existingId = String(existingLpn.id || "");
+
+            if (!existingId.startsWith(datePrefix)) {
+                return maxSeq;
+            }
+
+            const sequence = existingId.slice(datePrefix.length);
+
+            return /^\d+$/.test(sequence)
+                ? Math.max(maxSeq, Number(sequence))
+                : maxSeq;
+        }, 0);
+
+        const lastSeq = JSON.parse(
+            localStorage.getItem("lpnSequence")
+        ) || { date: "", seq: 0 };
+        const localSeq =
+            lastSeq.date === datePrefix ? Number(lastSeq.seq) || 0 : 0;
+        const nextSeq = Math.max(lastServerSeq, localSeq) + 1;
+        lpn = `${datePrefix}${String(nextSeq).padStart(3, "0")}`;
+
+        // Build the LPN record for lpn.json
+        const newLpn = {
+            id: lpn,
+            SKU: [sku],
+            quantity: [quantity],
+            "quantity type": ["Each"],
+            "product version": [version],
+            "batch lots": [batchLot],
+            weight: totalWeight
+        };
+
         const response = await fetch("/api/lpns", {
             method: "POST",
             headers: {
@@ -246,11 +269,29 @@ receiveForm.addEventListener("submit", async function (event) {
             throw new Error(result.error || "Failed to save LPN.");
         }
 
+        lpnCreated = true;
+
+        const locationResponse = await fetch("/api/move-lpn", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ lpn, locationName: "reception" })
+        });
+
+        const locationResult = await locationResponse.json();
+
+        if (!locationResponse.ok) {
+            throw new Error(
+                locationResult.error || "Failed to add LPN to reception."
+            );
+        }
+
         // Build pallet object for the rest of the app
         const newPallet = {
             lpn,
             sku,
-            location: "Receiving",
+            location: locationResult.locationName,
             quantity,
             batchLot,
             productVersion: version,
@@ -302,8 +343,9 @@ receiveForm.addEventListener("submit", async function (event) {
 
     } catch (error) {
         console.error("LPN save failed:", error);
-        alert("Could not save the received pallet: " + error.message);
+        const message = lpnCreated
+            ? `LPN ${lpn} was saved, but could not be added to reception: ${error.message}`
+            : "Could not save the received pallet: " + error.message;
+        alert(message);
     }
 });
-
-

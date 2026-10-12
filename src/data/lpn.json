@@ -102,5 +102,119 @@
             "1"
         ],
         "weight": 500
+    },
+    {
+        "id": "10122026001",
+        "SKU": [
+            "0003.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
+    },
+    {
+        "id": "10122026002",
+        "SKU": [
+            "0005.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
+    },
+    {
+        "id": "10122026003",
+        "SKU": [
+            "0001.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
+    },
+    {
+        "id": "10122026004",
+        "SKU": [
+            "0001.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
+    },
+    {
+        "id": "10122026005",
+        "SKU": [
+            "0001.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
+    },
+    {
+        "id": "10122026006",
+        "SKU": [
+            "0001.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
     }
 ]

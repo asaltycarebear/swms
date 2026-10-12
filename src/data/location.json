@@ -6,7 +6,14 @@
         "row": null,
         "column": null,
         "level": null,
-        "LPN": [],
+        "LPN": [
+            "10122026006",
+            "10122026005",
+            "10122026004",
+            "10122026003",
+            "10122026002",
+            "10122026001"
+        ],
         "weight": "",
         "storage type": null,
         "cycle count": "false",
