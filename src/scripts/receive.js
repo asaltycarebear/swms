@@ -1,12 +1,4 @@
 
-const API_BASE_URL = import.meta.env.DEV
-    ? "http://localhost:3000"
-    : "";
-
-function apiUrl(endpoint) {
-    return `${API_BASE_URL}${endpoint}`;
-}
-
 
 // *** Buttons for toggling forms ***
 
@@ -79,16 +71,8 @@ function saveItemToLocalStorage(item) {
     return item;
 }
 
-const response = await fetch(apiUrl("/api/items"), {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(item)
-});
-
 async function addItemToJson(item) {
-    const response = await fetch(`${API_BASE_URL}/api/items`, {
+    const response = await fetch("/api/items", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -99,7 +83,9 @@ async function addItemToJson(item) {
     const result = await response.json();
 
     if (!response.ok) {
-        throw new Error(result.error || "Failed to update items.json.");
+        throw new Error(
+            result.error || "Failed to update items.json."
+        );
     }
 
     return result;
@@ -146,98 +132,6 @@ newItemForm.addEventListener("submit", async function (event) {
     }
 });
 
-
-// ***LPN receiving***
-
-// Receive Form submit handler
-// receiveForm.addEventListener("submit", async function (event) { // <<<<<< async decleration
-//     event.preventDefault();
-
-//     // Get form values
-//     const sku = document.getElementById("receiveSku").value.trim();
-//     const quantity = parseInt(document.getElementById("receiveQuantity").value) || 0;
-//     const batchLot = document.getElementById("receiveBatchLot").value.trim();
-//     const version = parseInt(document.getElementById("receiveProductVersion").value) || 0;
-
-//     // Load items.json
-//     let items = [];
-//     try {
-//         const res = await fetch("data/items.json");
-//         if (!res.ok) throw new Error("Cannot load items.json");
-//         items = await res.json();
-//     } catch (err) {
-//         alert("Error fetching items.json: " + err.message);
-//         return;
-//     }
-
-//     // Find matching item by SKU + productVersion
-//     const matchedItem = items.find(i => i.sku === sku && i.productVersion == version);
-//     if (!matchedItem) {
-//         alert("No item matches this SKU + Product Version.");
-//         return;
-//     }
-
-//     // Generate LPN: MMDDYYYY + 3-digit sequence
-//     const today = new Date();
-//     const mm = String(today.getMonth() + 1).padStart(2, "0");
-//     const dd = String(today.getDate()).padStart(2, "0");
-//     const yyyy = today.getFullYear();
-//     const datePrefix = `${mm}${dd}${yyyy}`;
-
-//     let lastSeq = JSON.parse(localStorage.getItem("lpnSequence")) || { date: "", seq: 0 };
-//     if (lastSeq.date === datePrefix) {
-//         lastSeq.seq += 1;
-//     } else {
-//         lastSeq.date = datePrefix;
-//         lastSeq.seq = 1;
-//     }
-
-//     const lpn = `${datePrefix}${String(lastSeq.seq).padStart(3, "0")}`;
-//     localStorage.setItem("lpnSequence", JSON.stringify(lastSeq));
-
-//     // Build pallet object (include matched item fields for display on summary)
-//     const newPallet = {
-//         lpn,
-//         sku,
-//         location: "Receiving",
-//         quantity,
-//         batchLot,
-//         productVersion: version,
-//         description: matchedItem.description,
-//         make: matchedItem.make,
-//         model: matchedItem.model,
-//         weight: matchedItem.weight,
-//         length: matchedItem.length,
-//         width: matchedItem.width,
-//         height: matchedItem.height,
-//         costPerItem: matchedItem.costPerItem,
-//         salePrice: matchedItem.salePrice
-//     };
-
-//     // Save to localStorage
-//     const pallets = JSON.parse(localStorage.getItem("pallets")) || [];
-//     pallets.push(newPallet);
-//     localStorage.setItem("pallets", JSON.stringify(pallets));
-
-//         // Clear form if checkbox checked HOWEVER with a confirmation page this become unnessesary. I want to leave it as an option. 
-//         // In the future I would rather have a whole list of recent received lpn's to be shown after the session is done, 
-//         // but for this assignment I am using a confirmation page.
-//     if (document.getElementById("receiveClearAfterSubmit").checked) {
-//         receiveForm.reset();
-//     }
-
-//     // Build query string for confirmation page and redirect
-//     const formData = {
-//         lpn,
-//         sku,
-//         quantity,
-//         batchLot,
-//         productVersion: version
-//     };
-//     const query = new URLSearchParams(formData).toString();
-//     window.location.href = "confirm.html?" + query;
-// });
-
 // Receive Form submit handler
 receiveForm.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -271,7 +165,7 @@ receiveForm.addEventListener("submit", async function (event) {
     let items = [];
 
     try {
-        const response = await fetch(apiUrl("/api/items"));
+        const response = await fetch("/api/items");
 
         if (!response.ok) {
             throw new Error("Cannot load items.json.");
@@ -338,7 +232,7 @@ receiveForm.addEventListener("submit", async function (event) {
 
     // Send the LPN to the backend
     try {
-        const response = await fetch(apiUrl("/api/lpns"), {
+        const response = await fetch("/api/lpns", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

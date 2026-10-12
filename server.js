@@ -1,13 +1,9 @@
 // required for backend json editor
-// Installed exspress and cors for backend operation
 
 import express from "express";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import cors from "cors";
-import os from "node:os";
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,26 +11,20 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Local development uses src/data.
-// Render can use a persistent disk mounted at /var/data.
-// Original JSON files committed to the repository.
+// Original data committed with the project.
+// Used for local development and as the initial data source on Render.
 const SOURCE_DATA_DIR = path.join(__dirname, "src", "data");
 
-// Temporary, writable demo data.
-// DATA_DIR can be overridden with an environment variable.
+// Local: src/data
+// Render: /var/data, configured using the DATA_DIR environment variable.
 const DATA_DIR =
-    process.env.DATA_DIR || path.join(os.tmpdir(), "swms-demo-data");
+    process.env.DATA_DIR || SOURCE_DATA_DIR;
 
 const itemsFile = path.join(DATA_DIR, "items.json");
 const lpnsFile = path.join(DATA_DIR, "lpn.json");
 const locationsFile = path.join(DATA_DIR, "location.json");
 
-app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173"
-    ]
-}));
+const distDirectory = path.join(__dirname, "dist");
 
 app.use(express.json());
 
@@ -66,13 +56,21 @@ async function initializeDataFiles() {
         const destination = path.join(DATA_DIR, filename);
 
         try {
+            // If the destination exists, preserve its current data.
             await fs.access(destination);
-        } catch {
+        } catch (error) {
+            if (error.code !== "ENOENT") {
+                throw error;
+            }
+
             const source = path.join(SOURCE_DATA_DIR, filename);
+
+            // Fail safely if an original data file is missing.
+            await fs.access(source);
 
             await fs.copyFile(source, destination);
 
-            console.log(`Initialized ${filename}`);
+            console.log(`Initialized ${filename} in ${DATA_DIR}`);
         }
     }
 }
@@ -132,11 +130,7 @@ app.post("/api/items", async (req, res) => {
         items.push(newItem);
 
         // Write the updated array back to items.json.
-        await fs.writeFile(
-            itemsFile,
-            JSON.stringify(items, null, 4) + "\n",
-            "utf8"
-        );
+        await writeJsonFile(itemsFile, items);
 
         return res.status(201).json({
             message: "Item added successfully.",
@@ -179,8 +173,7 @@ app.post("/api/lpns", async (req, res) => {
         }
 
         // Read items.json
-        const itemsContents = await fs.readFile(itemsFile, "utf8");
-        const items = JSON.parse(itemsContents);
+        const items = await readJsonFile(itemsFile);
 
         // Only allow SKUs and versions that exist in items.json
         const matchedItem = items.find(
@@ -231,11 +224,7 @@ app.post("/api/lpns", async (req, res) => {
         // Add the new LPN to lpn.json
         lpns.push(newLpn);
 
-        await fs.writeFile(
-            lpnsFile,
-            JSON.stringify(lpns, null, 4) + "\n",
-            "utf8"
-        );
+        await writeJsonFile(lpnsFile, lpns);
 
         return res.status(201).json({
             message: "Pallet received successfully.",
@@ -328,11 +317,7 @@ app.post("/api/move-lpn", async (req, res) => {
         destination.LPN.push(lpn);
 
         // Save the updated location data
-        await fs.writeFile(
-            locationsFile,
-            JSON.stringify(locations, null, 4) + "\n",
-            "utf8"
-        );
+        await writeJsonFile(locationsFile, locations);
 
         return res.status(200).json({
             message: "LPN moved successfully.",
@@ -349,19 +334,72 @@ app.post("/api/move-lpn", async (req, res) => {
     }
 });
 
-// Serve the built Vite frontend.
-const distDirectory = path.join(__dirname, "dist");
+// DELETE /api/lpns/:id - pull an LPN out of inventory.
+app.delete("/api/lpns/:id", async (req, res) => {
+    try {
+        const lpnId = String(req.params.id || "").trim();
 
+        if (!lpnId) {
+            return res.status(400).json({
+                error: "An LPN number is required.",
+            });
+        }
+
+        const lpns = await readJsonFile(lpnsFile);
+
+        const lpnIndex = lpns.findIndex(
+            record => String(record.id).trim() === lpnId
+        );
+
+        if (lpnIndex === -1) {
+            return res.status(404).json({
+                error: `LPN "${lpnId}" was not found.`,
+            });
+        }
+
+        const locations = await readJsonFile(locationsFile);
+
+        // Remove the LPN from all location assignments.
+        for (const location of locations) {
+            if (Array.isArray(location.LPN)) {
+                location.LPN = location.LPN.filter(
+                    id => String(id).trim() !== lpnId
+                );
+            }
+        }
+
+        // Remove the LPN record itself.
+        const [removedLpn] = lpns.splice(lpnIndex, 1);
+
+        // Save the updated JSON data.
+        await writeJsonFile(locationsFile, locations);
+        await writeJsonFile(lpnsFile, lpns);
+
+        return res.status(200).json({
+            message: `LPN "${lpnId}" pulled successfully.`,
+            lpn: removedLpn,
+        });
+    } catch (error) {
+        console.error("Failed to pull LPN:", error);
+
+        return res.status(500).json({
+            error: "Failed to pull LPN. Check the backend console.",
+        });
+    }
+});
+
+// Serve the built Vite frontend.
 app.use(express.static(distDirectory));
 
-// Initialize the demo data before accepting requests.
+// Initialize data before accepting API requests.
 initializeDataFiles()
     .then(() => {
         app.listen(PORT, "0.0.0.0", () => {
             console.log(`SWMS server running on port ${PORT}`);
+            console.log(`JSON data directory: ${DATA_DIR}`);
         });
     })
     .catch((error) => {
-        console.error("Failed to initialize demo data:", error);
+        console.error("Failed to initialize data files:", error);
         process.exit(1);
     });

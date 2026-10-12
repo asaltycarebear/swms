@@ -1,12 +1,3 @@
-const API_BASE_URL = import.meta.env.DEV
-    ? "http://localhost:3000"
-    : "";
-
-function apiUrl(endpoint) {
-    return `${API_BASE_URL}${endpoint}`;
-}
-
-
 const moveForm = document.getElementById("moveForm");
 const moveMessage = document.getElementById("moveMessage");
 const moveButton = document.getElementById("moveButton");
@@ -28,7 +19,7 @@ moveForm.addEventListener("submit", async function (event) {
     showMessage("Moving LPN...", "");
 
     try {
-        const response = await fetch(apiUrl("/api/move-lpn"), {
+        const response = await fetch("/api/move-lpn", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -84,7 +84,9 @@
         "row": "1",
         "column": "5",
         "level": "1",
-        "LPN": [],
+        "LPN": [
+            "10112026004"
+        ],
         "weight": "",
         "storage type": "",
         "cycle count": "true",

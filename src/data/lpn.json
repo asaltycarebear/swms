@@ -83,5 +83,24 @@
             "1"
         ],
         "weight": 550
+    },
+    {
+        "id": "10112026004",
+        "SKU": [
+            "0001.1"
+        ],
+        "quantity": [
+            1000
+        ],
+        "quantity type": [
+            "Each"
+        ],
+        "product version": [
+            1
+        ],
+        "batch lots": [
+            "1"
+        ],
+        "weight": 500
     }
 ]
