@@ -1,7 +1,13 @@
+
+
+console.log("SUMMARY: JavaScript file loaded");
+
 // alternate version for local storage available
 // future update will include drop down filters
 
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("SUMMARY: DOMContentLoaded fired");
+
     const table = document.getElementById("stocksummary");
     const tableBody = table?.querySelector("tbody");
     const modalContainer = document.getElementById("modalContainer");
@@ -10,6 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearButton = document.getElementById("clearTable");
     const exportButton = document.getElementById("exportCSV");
     const clearAfterExport = document.getElementById("clearAfterExport");
+
+    console.log("SUMMARY: Buttons found", {
+        loadButton,
+        clearButton,
+        exportButton
+    });
 
     // Load JSON files.
     async function loadJSONData() {
@@ -307,6 +319,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // The buttons!
     loadButton?.addEventListener("click", () => {
+        console.log("SUMMARY: Load Table clicked");
+
         loadButton.classList.remove("load-prompt");
         populateTable();
     });
