@@ -43,3 +43,86 @@
 .modal-content img {
     margin: 0.5rem 0 1rem 0;
 }
+
+/* Summary button animation styles */
+/* Shared button animation setup */
+#loadTable,
+#clearTable,
+#exportCSV {
+    transition:
+        background-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* LOAD TABLE: attention pulse on initial page load */
+#loadTable.load-prompt {
+    animation: load-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes load-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(36, 172, 255, 0.15);
+        background-color: var(--secondary-color);
+    }
+
+    50% {
+        box-shadow: 0 0 0 9px rgba(36, 172, 255, 0.35);
+        background-color: #8bd5ff;
+    }
+}
+
+/* CLEAR TABLE: red flash */
+#clearTable.flash-red {
+    animation: clear-flash 0.65s ease-out;
+}
+
+@keyframes clear-flash {
+    0% {
+        background-color: #ffb3b3;
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6);
+    }
+
+    40% {
+        background-color: #dc2626;
+        box-shadow: 0 0 0 7px rgba(220, 38, 38, 0.25);
+    }
+
+    100% {
+        background-color: #ffb3b3;
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    }
+}
+
+/* EXPORT CSV: green flash */
+#exportCSV.flash-green {
+    animation: export-flash 0.8s ease-out;
+}
+
+@keyframes export-flash {
+    0% {
+        background-color: #b7efc5;
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+    }
+
+    40% {
+        background-color: #22a447;
+        box-shadow: 0 0 0 7px rgba(22, 163, 74, 0.25);
+    }
+
+    100% {
+        background-color: #b7efc5;
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+    }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+
+    #loadTable.load-prompt,
+    #clearTable.flash-red,
+    #exportCSV.flash-green {
+        animation: none;
+    }
+}

@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function exportCSV() {
         if (!table || !tableBody || tableBody.rows.length === 0) {
             alert("Load the table before exporting.");
-            return;
+            return false;
         }
 
         const csv = tableToCSV();
@@ -285,10 +285,43 @@ document.addEventListener("DOMContentLoaded", () => {
             clearTable();
             clearAfterExport.checked = false;
         }
+
+        return true;
     }
 
     // The buttons!
-    loadButton?.addEventListener("click", populateTable);
-    clearButton?.addEventListener("click", clearTable);
-    exportButton?.addEventListener("click", exportCSV);
+    // Add the initial prompt animation.
+    loadButton?.classList.add("load-prompt");
+
+    // Restart a button animation each time it is triggered.
+    function flashButton(button, animationClass) {
+        if (!button) return;
+
+        button.classList.remove(animationClass);
+
+        // Force the browser to restart the CSS animation.
+        void button.offsetWidth;
+
+        button.classList.add(animationClass);
+    }
+
+    // The buttons!
+    loadButton?.addEventListener("click", () => {
+        loadButton.classList.remove("load-prompt");
+        populateTable();
+    });
+
+    clearButton?.addEventListener("click", () => {
+        flashButton(clearButton, "flash-red");
+        clearTable();
+    });
+
+    exportButton?.addEventListener("click", () => {
+        // Only show green if an export actually happens.
+        const exported = exportCSV();
+
+        if (exported) {
+            flashButton(exportButton, "flash-green");
+        }
+    });
 });
