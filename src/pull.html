@@ -36,7 +36,17 @@
     <header id="header-main"></header>
 
     <main>
-
+        <section class="pull-container">
+    
+            <form id="pullForm">
+                <label for="lpnInput">LPN Number</label>
+                <input type="text" id="lpnInput" name="lpn" placeholder="Enter LPN number" required>
+    
+                <button type="submit" id="pullButton">Pull LPN</button>
+            </form>
+    
+            <p id="moveMessage" role="status" aria-live="polite"></p>
+        </section>
     </main>
 
     <footer id="footer-main"></footer>

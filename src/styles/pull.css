@@ -1,0 +1,74 @@
+/* Pull page layout */
+
+
+#pullForm {
+    transform-origin: center center;
+    transition:
+        transform 0.45s ease-in,
+        opacity 0.45s ease-in;
+}
+
+#pullButton {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+#pullButton:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+/* The pallet/form is being pulled away */
+#pullForm.pulling {
+    transform: translateY(50px) scale(0.05) rotate(8deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Status messages */
+#moveMessage {
+    min-height: 1.5em;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+#moveMessage.pull-success {
+    color: #18733b;
+    font-weight: 700;
+    animation: success-pop 0.35s ease-out;
+}
+
+#moveMessage.pull-error {
+    color: #b42318;
+    font-weight: 600;
+}
+
+/* Success message pops into view */
+@keyframes success-pop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+    #pullForm,
+    #pullButton {
+        transition: none;
+    }
+
+    #moveMessage.pull-success {
+        animation: none;
+    }
+}

@@ -1,5 +1,4 @@
 
-
 // *** Buttons for toggling forms ***
 
 const showReceiveBtn = document.getElementById("showReceive");

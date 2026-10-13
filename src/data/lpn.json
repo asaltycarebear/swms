@@ -85,25 +85,6 @@
         "weight": 550
     },
     {
-        "id": "10112026004",
-        "SKU": [
-            "0001.1"
-        ],
-        "quantity": [
-            1000
-        ],
-        "quantity type": [
-            "Each"
-        ],
-        "product version": [
-            1
-        ],
-        "batch lots": [
-            "1"
-        ],
-        "weight": 500
-    },
-    {
         "id": "10122026001",
         "SKU": [
             "0003.1"
@@ -180,28 +161,9 @@
         "weight": 500
     },
     {
-        "id": "10122026005",
+        "id": "10122026007",
         "SKU": [
-            "0001.1"
-        ],
-        "quantity": [
-            1000
-        ],
-        "quantity type": [
-            "Each"
-        ],
-        "product version": [
-            1
-        ],
-        "batch lots": [
-            "1"
-        ],
-        "weight": 500
-    },
-    {
-        "id": "10122026006",
-        "SKU": [
-            "0001.1"
+            "0006.1"
         ],
         "quantity": [
             1000
