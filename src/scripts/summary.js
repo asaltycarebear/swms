@@ -5,8 +5,8 @@ console.log("SUMMARY: JavaScript file loaded");
 // alternate version for local storage available
 // future update will include drop down filters
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("SUMMARY: DOMContentLoaded fired");
+function initializeSummary() {
+    console.log("SUMMARY: Initialization started");
 
     const table = document.getElementById("stocksummary");
     const tableBody = table?.querySelector("tbody");
@@ -338,4 +338,12 @@ document.addEventListener("DOMContentLoaded", () => {
             flashButton(exportButton, "flash-green");
         }
     });
-});
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeSummary, {
+        once: true
+    });
+} else {
+    initializeSummary();
+}
