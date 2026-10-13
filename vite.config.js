@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,18 +9,15 @@ const __dirname = dirname(__filename);
 export default defineConfig({
     root: resolve(__dirname, "src"),
 
-    // Forward API requests to Express during local development.
+    // Local development frontend: http://localhost:5173
     server: {
+        host: "localhost",
         proxy: {
             "/api": {
                 target: "http://localhost:3000",
                 changeOrigin: true,
             },
         },
-    },
-
-    preview: {
-        allowedHosts: ["swms-0iyt.onrender.com"],
     },
 
     build: {
