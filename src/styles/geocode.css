@@ -236,10 +236,6 @@
     }
 }
 
-/* =========================================
-   Larger screens
-   ========================================= */
-
 @media screen and (min-width: 700px) {
     .geocode-page {
         padding-top: 3rem;
