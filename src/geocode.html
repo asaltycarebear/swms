@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Garrett Stockwell">
+
+    <meta name="description"
+        content="Find distribution center addresses and geographic coordinates using OpenStreetMap.">
+
+    <title>Stockwell Inventory – Distribution Center Geocoder</title>
+
+    <meta property="og:url" content="https://swms-0iyt.onrender.com/geocode.html">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-large.css">
+    <link rel="stylesheet" href="styles/geocode.css">
+
+    <script type="module" src="scripts/getdates.js" defer></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script type="module" src="scripts/geocode.js" defer></script>
+
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header id="header-main"></header>
+
+    <main class="geocode-page">
+        <section class="geocode-intro">
+            <h1>Distribution Center Geocoder</h1>
+            <p>
+                Find a distribution center's geographic location by
+                searching for its address. Results include latitude,
+                longitude, and a link to OpenStreetMap.
+            </p>
+        </section>
+
+        <section class="geocode-search" aria-labelledby="geocode-heading">
+            <h2 id="geocode-heading">Find a Location</h2>
+
+            <form id="geocode-form">
+                <div class="geocode-field">
+                    <label for="geocode-address">
+                        Distribution Center Address
+                    </label>
+
+                    <input type="text" id="geocode-address" name="address"
+                        placeholder="e.g., 1600 Pennsylvania Avenue NW, Washington, DC" autocomplete="street-address"
+                        required maxlength="200">
+                </div>
+
+                <button type="submit" id="geocode-submit">
+                    Search Address
+                </button>
+            </form>
+
+            <p class="geocode-attribution">
+                Location data provided by
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
+                    OpenStreetMap contributors
+                </a>.
+            </p>
+        </section>
+
+        <section id="geocode-status" class="geocode-status" role="status" aria-live="polite" hidden>
+        </section>
+
+        <section id="geocode-results" class="geocode-results" aria-labelledby="geocode-results-heading" hidden>
+            <h2 id="geocode-results-heading">Search Results</h2>
+
+            <div id="geocode-results-list"></div>
+        </section>
+    </main>
+
+    <footer id="footer-main"></footer>
+</body>
+
+</html>
