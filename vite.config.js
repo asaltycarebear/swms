@@ -36,6 +36,7 @@ export default defineConfig({
                 pull: resolve(__dirname, "src/pull.html"),
                 receive: resolve(__dirname, "src/receive.html"),
                 summary: resolve(__dirname, "src/summary.html"),
+                geocode: resolve(__dirname, "src/geocode.html"),
             },
         },
     },

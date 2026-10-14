@@ -25,6 +25,14 @@ const locationsFile = path.join(DATA_DIR, "location.json");
 
 const distDirectory = path.join(__dirname, "dist");
 
+// Map API
+let lastGeocodeRequestAt = 0;
+const OVERPASS_ENDPOINTS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.osm.ch/api/interpreter"
+];
+
 app.use(express.json());
 
 // Read a JSON file and return its contents.
@@ -102,6 +110,192 @@ app.get("/api/locations", async (req, res) => {
     }
 });
 
+app.get("/api/geocode", async (req, res) => {
+    const query = String(req.query.q || "").trim();
+
+    if (!query || query.length > 150) {
+        return res.status(400).json({
+            error: "Enter a valid city or ZIP code."
+        });
+    }
+
+    try {
+        // Respect Nominatim's public-service rate limit.
+        const elapsed = Date.now() - lastGeocodeRequestAt;
+
+        if (elapsed < 1100) {
+            await new Promise((resolve) => {
+                setTimeout(resolve, 1100 - elapsed);
+            });
+        }
+
+        lastGeocodeRequestAt = Date.now();
+
+        const url = new URL(
+            "https://nominatim.openstreetmap.org/search"
+        );
+
+        url.searchParams.set("q", query);
+        url.searchParams.set("format", "jsonv2");
+        url.searchParams.set("limit", "1");
+        url.searchParams.set("countrycodes", "us");
+
+        const response = await fetch(url, {
+            headers: {
+                "User-Agent": "StockwellInventory/1.0 (educational store finder)",
+                "Accept-Language": "en"
+            },
+            signal: AbortSignal.timeout(15000)
+        });
+
+        if (!response.ok) {
+            console.error(
+                "Nominatim response status:",
+                response.status
+            );
+
+            return res.status(502).json({
+                error: "The location service is temporarily unavailable."
+            });
+        }
+
+        const results = await response.json();
+
+        if (!results.length) {
+            return res.status(404).json({
+                error: "Location not found. Try a city and state or a valid ZIP code."
+            });
+        }
+
+        return res.json({
+            lat: results[0].lat,
+            lon: results[0].lon,
+            display_name: results[0].display_name
+        });
+    } catch (error) {
+        console.error("Geocoding error:", error);
+
+        return res.status(502).json({
+            error: "Unable to look up that location right now. Please try again."
+        });
+    }
+});
+
+app.get("/api/stores", async (req, res) => {
+    const lat = Number(req.query.lat);
+    const lon = Number(req.query.lon);
+    const radius = Number(req.query.radius || 10000);
+
+    const allowedRadii = [5000, 10000, 25000];
+
+    if (
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lon) ||
+        lat < -90 ||
+        lat > 90 ||
+        lon < -180 ||
+        lon > 180 ||
+        !allowedRadii.includes(radius)
+    ) {
+        return res.status(400).json({
+            error: "Invalid coordinates or search radius."
+        });
+    }
+
+    try {
+        const query = `
+            [out:json][timeout:20];
+            (
+                nwr(around:${radius},${lat},${lon})
+                    ["shop"="clothes"];
+
+                nwr(around:${radius},${lat},${lon})
+                    ["shop"="department_store"];
+
+                nwr(around:${radius},${lat},${lon})
+                    ["name"~"Walmart",i];
+
+                nwr(around:${radius},${lat},${lon})
+                    ["name"~"Target",i];
+
+                nwr(around:${radius},${lat},${lon})
+                    ["brand"~"Walmart",i];
+
+                nwr(around:${radius},${lat},${lon})
+                    ["brand"~"Target",i];
+            );
+            out center tags;
+        `;
+
+        let data;
+
+        for (const endpoint of OVERPASS_ENDPOINTS) {
+            let response;
+
+            try {
+                response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded;charset=UTF-8",
+                        "User-Agent":
+                            "StockwellInventory/1.0 (educational store finder)"
+                    },
+                    body: new URLSearchParams({ data: query }),
+                    signal: AbortSignal.timeout(10000)
+                });
+            } catch (error) {
+                console.warn(
+                    `Overpass request failed at ${endpoint}:`,
+                    error.message
+                );
+                continue;
+            }
+
+            if (response.ok) {
+                data = await response.json();
+                break;
+            }
+
+            const details = (await response.text()).slice(0, 500);
+            console.error(
+                `Overpass response from ${endpoint}:`,
+                response.status,
+                details
+            );
+
+            if (![429, 502, 503, 504].includes(response.status)) {
+                return res.status(502).json({
+                    error: "The store search service is temporarily unavailable. Please try again."
+                });
+            }
+        }
+
+        if (!data) {
+            return res.status(502).json({
+                error: "The store search service is temporarily unavailable. Please try again."
+            });
+        }
+
+        // Remove duplicate OpenStreetMap objects.
+        const uniqueElements = [
+            ...new Map(
+                (data.elements || []).map((element) => [
+                    `${element.type}/${element.id}`,
+                    element
+                ])
+            ).values()
+        ];
+
+        return res.json({ elements: uniqueElements });
+    } catch (error) {
+        console.error("Store lookup error:", error);
+
+        return res.status(502).json({
+            error: "Unable to retrieve stores right now. Please try again shortly."
+        });
+    }
+});
 
 // POST /api/items - add a new item to items.json
 app.post("/api/items", async (req, res) => {

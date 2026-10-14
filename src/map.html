@@ -31,8 +31,57 @@
     <body>
         <header id="header-main"></header>
 
-        <main>
+        <main class="map-page">
+            <h1>Clothing Store Finder</h1>
+            <p class="map-intro">
+                Find clothing retailers near a city, ZIP code, or your current location.
+            </p>
 
+            <section class="store-search" aria-labelledby="search-heading">
+                <h2 id="search-heading">Find Stores</h2>
+
+                <form id="storeSearchForm">
+                    <label for="locationInput">City or ZIP code</label>
+
+                    <div class="search-controls">
+                        <input id="locationInput" name="location" type="text" placeholder="e.g. Denver, CO or 80134"
+                            autocomplete="postal-code" maxlength="150" required>
+                        <button type="submit" id="searchButton">Search</button>
+                        <button type="button" id="nearMeButton">
+                            Search Near Me
+                        </button>
+                    </div>
+
+                    <label for="radiusSelect">Search radius</label>
+                    <select id="radiusSelect" name="radius">
+                        <option value="5000">5 km (3.1 mi)</option>
+                        <option value="10000" selected>10 km (6.2 mi)</option>
+                        <option value="25000">25 km (15.5 mi)</option>
+                    </select>
+                </form>
+
+                <p id="searchStatus" role="status" aria-live="polite">
+                    Enter a city or ZIP code, or choose Search Near Me.
+                </p>
+            </section>
+
+            <section class="store-results" aria-labelledby="results-heading">
+                <div class="results-heading">
+                    <h2 id="results-heading">Matching Stores</h2>
+                    <span id="resultCount"></span>
+                </div>
+
+                <ul id="storeList">
+                    <li>Search for a location to find nearby stores.</li>
+                </ul>
+            </section>
+
+            <p class="map-attribution">
+                Store data ©
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap
+                    contributors</a>.
+                Store details may be incomplete.
+            </p>
         </main>
         
         <footer id="footer-main"></footer>
