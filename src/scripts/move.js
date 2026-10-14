@@ -18,6 +18,9 @@ moveForm.addEventListener("submit", async function (event) {
     moveButton.disabled = true;
     showMessage("Moving LPN...", "");
 
+    // Clear any previous animation.
+    moveForm.classList.remove("move-success-animation", "move-error-animation");
+
     try {
         const response = await fetch("/api/move-lpn", {
             method: "POST",
@@ -42,21 +45,38 @@ moveForm.addEventListener("submit", async function (event) {
             throw new Error(result.error || "Could not move the LPN.");
         }
 
+        // Show success and swipe the form to the right.
         showMessage(
             `Successfully moved LPN ${ lpn } to ${ result.locationName }.`,
             "success"
         );
 
-        moveForm.reset();
+        moveForm.classList.add("move-success-animation");
+
+        // Reset and restore the form after the animation.
+        window.setTimeout(() => {
+            moveForm.reset();
+            moveForm.classList.remove("move-success-animation");
+            moveButton.disabled = false;
+            document.getElementById("lpnInput").focus();
+        }, 1200);
+
     } catch (error) {
         console.error("Move LPN failed:", error);
+
         showMessage(error.message, "error");
-    } finally {
+        moveForm.classList.add("move-error-animation");
+
+        // Remove the shake class so another failure can animate.
+        window.setTimeout(() => {
+            moveForm.classList.remove("move-error-animation");
+        }, 500);
+
         moveButton.disabled = false;
     }
 });
 
 function showMessage(message, type) {
     moveMessage.textContent = message;
-    moveMessage.className = type;
+    moveMessage.className = type ? `move-message ${type}` : "move-message";
 }

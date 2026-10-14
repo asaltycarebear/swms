@@ -91,9 +91,7 @@
         "row": "1",
         "column": "5",
         "level": "1",
-        "LPN": [
-            "10112026004"
-        ],
+        "LPN": [],
         "weight": "",
         "storage type": "",
         "cycle count": "true",
@@ -107,7 +105,9 @@
         "row": "1",
         "column": "6",
         "level": "1",
-        "LPN": [],
+        "LPN": [
+            "10112026004"
+        ],
         "weight": "",
         "storage type": "",
         "cycle count": "true",
