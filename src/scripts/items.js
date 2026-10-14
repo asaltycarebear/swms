@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.querySelector("#itemsTable tbody");
 
     if (!tableBody) {
-        console.error('Could not find "#itemsTable tbody".');
+        console.error("Could not find \"#itemsTable tbody\".");
         return;
     }
 

@@ -96,7 +96,7 @@ function initializeSummary() {
     // Load and populate the stock summary table.
     async function populateTable() {
         if (!tableBody) {
-            alert('Could not find the table body for "stocksummary".');
+            alert("Could not find the table body for \"stocksummary\".");
             return;
         }
 
@@ -263,7 +263,7 @@ function initializeSummary() {
                 Array.from(row.cells)
                     .map((cell) => {
                         const value = cell.textContent.trim();
-                        return `"${value.replace(/"/g, '""')}"`;
+                        return `"${value.replace(/"/g, "\"\"")}"`;
                     })
                     .join(",")
             )
