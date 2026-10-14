@@ -17,8 +17,7 @@ const SOURCE_DATA_DIR = path.join(__dirname, "src", "data");
 
 // Local: src/data
 // Render: /var/data, configured using the DATA_DIR environment variable.
-const DATA_DIR =
-    process.env.DATA_DIR || SOURCE_DATA_DIR;
+const DATA_DIR = process.env.DATA_DIR || SOURCE_DATA_DIR;
 
 const itemsFile = path.join(DATA_DIR, "items.json");
 const lpnsFile = path.join(DATA_DIR, "lpn.json");
@@ -397,6 +396,12 @@ initializeDataFiles()
         app.listen(PORT, "0.0.0.0", () => {
             console.log(`SWMS server running on port ${PORT}`);
             console.log(`JSON data directory: ${DATA_DIR}`);
+            console.log("Server environment:", process.env.NODE_ENV);
+            console.log("DATA_DIR:", DATA_DIR);
+            console.log("Items file:", itemsFile);
+            console.log("LPN file:", lpnsFile);
+            console.log("Locations file:", locationsFile);
+            console.log("Frontend directory:", distDirectory);
         });
     })
     .catch((error) => {
