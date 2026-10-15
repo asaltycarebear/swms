@@ -1,4 +1,3 @@
-// Stockwell Inventory - Distribution Center Geocoder
 // Geocodes two addresses using Nominatim and vanilla JavaScript.
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Nominatim usage policy: https://operations.osmfoundation.org/policies/nominatim/
     const NOMINATIM_URL =
         "https://nominatim.openstreetmap.org/search";
 
@@ -81,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lastRequestTime = Date.now();
     }
 
+    //Address finder, card population
     async function geocodeAddress(address) {
         const cacheKey = address.trim().toLowerCase();
 
@@ -141,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return result;
     }
 
-    // Populate one of the two existing HTML result cards.
+    // second card populator
     function displayLocation(card, location) {
         card.querySelector(".geocode-result-address").textContent =
             location.address;
@@ -161,6 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
             `#map=16/${location.latitude}/${location.longitude}`;
     }
 
+    //HAVERSINE: The name comes from the haversine function, which is defined as \(\text{hav}(\theta) = \sin^2\left(\frac{\theta}{2}\right) = \frac{1 - \cos(\theta)}{2}\).
+    // Given two points with latitudes \((\phi_1, \phi_2) \) and longitudes \((\lambda_1, \lambda_2) \) in radians:
     function getDistanceKm(first, second) {
         const earthRadiusKm = 6371;
         const toRadians = (degrees) => degrees * Math.PI / 180;
@@ -168,7 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
             toRadians(second.latitude - first.latitude);
         const longitudeDifference =
             toRadians(second.longitude - first.longitude);
-
+        
+        //The haversine formula calculates the shortest "as-the-crow-flies" 
+        // great-circle distance between two points on the surface of a sphere, 
+        // using their latitude and longitude coordinates
         const haversine =
             Math.sin(latitudeDifference / 2) ** 2 +
             Math.cos(toRadians(first.latitude)) *
