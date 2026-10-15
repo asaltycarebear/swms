@@ -5,12 +5,8 @@ font-weight: bold;
 }
 
 @media (max-width: 600px) {
-
-  .largehero {
-    display: none;
-  }
-
-  .heromobile{
+  .hero img {
+    display: block;
     width: 100%;
     height: auto;
   }
@@ -38,10 +34,6 @@ font-weight: bold;
     border-radius: 20px;
     object-fit: cover;
 }
-
-  .heroMobile {
-    display: none;
-  }
 
   .hero h2 {
       white-space: nowrap;
@@ -76,4 +68,3 @@ font-weight: bold;
 }
 
 }
-
