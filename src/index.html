@@ -20,6 +20,7 @@
         
         <!--Keep--> <script type="module" src="scripts/getdates.js" defer></script>
         <!--Keep--> <script type="module" src="scripts/main.js" defer></script>
+        <script type="module" src="scripts/index.js"></script>
 
         <link rel="icon" href="images/favicon.ico">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,26 +34,7 @@
             <section>
             <h2>Welcome to Stockwell Inventory</h2>
             </section>
-            <img id="hero-image" data-mobile-src="images/heromobile.webp"
-                data-desktop-src="images/hero.webp"
-                alt="Warehouse storage and inventory shelving">
-            <script>
-                const heroImage = document.getElementById("hero-image");
-                const mobileHeroMedia = window.matchMedia("(max-width: 600px)");
-
-                function loadHeroImage() {
-                    const imageSource = mobileHeroMedia.matches
-                        ? heroImage.dataset.mobileSrc
-                        : heroImage.dataset.desktopSrc;
-
-                    if (heroImage.getAttribute("src") !== imageSource) {
-                        heroImage.src = imageSource;
-                    }
-                }
-
-                loadHeroImage();
-                mobileHeroMedia.addEventListener("change", loadHeroImage);
-            </script>
+            <img id="hero-image" alt="Warehouse storage and inventory shelving">
             <div class="about">
             <p>Do you ever wish that your "spreadsheet" sized company could have the power and control over your internal logistics like a million square foot warehouse? Great news, you can. And we won't even make you switch to a database (depending on your needs). At Stockwell Inventory, we have over 10 years of warehouse inventory management, with both the programming knowledge, and spreadsheet expertise to help your company lower your error rate, improve your reporting, and give a serious boost to your floor team member's quality of life.</p>
             <p>If you are a company who tracks most of your inventory on spreadsheets we have the perfect answer to your tracking needs, and it can all be done with CSV files. With our highly modular system, we can craft the perfect table to fit your already existing spreadsheet, or you can take a look at our templates to find your perfect fit. In the meantime, we have an example of the Receiving Tool, and an example of how the Stock History CSV gets created. Use the links in the header to try it out! We look forward to hearing from you!</p>
