@@ -334,33 +334,5 @@
         "productVersion": 1,
         "costPerItem": 5,
         "salePrice": 8.99
-    },
-    {
-        "sku": "test",
-        "description": "test",
-        "make": "test",
-        "model": "test",
-        "weight": 1,
-        "length": 1,
-        "width": 1,
-        "height": 1,
-        "batchLot": "1",
-        "productVersion": 1,
-        "costPerItem": 1,
-        "salePrice": 1
-    },
-    {
-        "sku": "test2",
-        "description": "test2",
-        "make": "test2",
-        "model": "test2",
-        "weight": 1,
-        "length": 1,
-        "width": 1,
-        "height": 1,
-        "batchLot": "1",
-        "productVersion": 1,
-        "costPerItem": 1,
-        "salePrice": 1
     }
 ]
