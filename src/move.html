@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Garrett Stockwell">
-    
-    <!--Update--> <meta name="description" content="A function to move product in the JSON file and local storage">
-    <!--Update--> <title>WDD 231: Home Page - Garrett Stockwell</title>
-    
-    <!--Update (facebook)--><meta property="og:title" content="Move Function">
-    <!--Update (facebook)--><meta property="og:description" content="A function to move product in the JSON file and local storage">
-    <!--Update (facebook)--><meta property="og:image" content="https://asaltycarebear.github.io/wdd231/images/profile.jpg">
-    <!--Update (facebook)--><meta property="og:url" content="https://asaltycarebear.github.io/wdd231/">
-    <!--Keep--><meta property="og:type" content="website">
-    
-    <!--Update--> <link rel="stylesheet" href="styles/styles.css">
-    <!--Update--> <link rel="stylesheet" href="styles/styles-large.css">
-    <!--Update (page css goes here)--><link rel="stylesheet" href="styles/move.css">
+
+    <meta name="description" content="A function to move product in the JSON file and local storage">
+    <title>Stockwell Inventory Move LPN Tool</title>
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-large.css">
+    <link rel="stylesheet" href="styles/move.css">
     <link rel="stylesheet" href="styles/forms.css">
-    
-    <!--Keep--> <script type="module" src="scripts/getdates.js" defer></script>
-    <!--Keep--> <script type="module" src="scripts/main.js" ></script>
-    <!--Update (page script goes here)--> <script type="module" src="scripts/move.js" defer></script>
+
+    <script type="module" src="scripts/getdates.js" defer></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script type="module" src="scripts/move.js" defer></script>
 
     <link rel="icon" href="images/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&family=Quantico&display=swap" S
+        rel="stylesheet">
 </head>
+
 <body>
     <header id="header-main"></header>
-    
+
     <main>
         <section class="move-container">
             <!-- <h2>Move LPN</h2> -->
-    
+
             <form id="moveForm">
                 <label for="lpnInput">LPN Number</label>
                 <input type="text" id="lpnInput" name="lpn" placeholder="Enter LPN number" required>
-    
+
                 <label for="locationInput">New Location</label>
                 <input type="text" id="locationInput" name="location" placeholder="Enter location name" required>
-    
+
                 <button type="submit" id="moveButton">Move LPN</button>
             </form>
-    
+
             <p id="moveMessage" role="status" aria-live="polite"></p>
         </section>
     </main>
 
     <footer id="footer-main"></footer>
 </body>
+
 </html>
