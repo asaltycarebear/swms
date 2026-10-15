@@ -1,15 +1,3 @@
-// const response = await fetch(
-//     `/api/lpns/${encodeURIComponent(lpn)}`,
-//     {
-//         method: "DELETE"
-//     }
-// );
-
-// const result = await response.json();
-
-// if (!response.ok) {
-//     throw new Error(result.error || "Failed to pull LPN.");
-// }
 
 document.addEventListener("DOMContentLoaded", () => {
     const pullForm = document.getElementById("pullForm");
@@ -17,11 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const pullButton = document.getElementById("pullButton");
     const moveMessage = document.getElementById("moveMessage");
 
+    // Can probably remove, but should keep in case testing is required further in the future
     if (!pullForm || !lpnInput || !pullButton || !moveMessage) {
         console.error("The pull form is missing one or more required elements.");
         return;
     }
 
+    //submition handeler
     pullForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -52,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error(result.error || "Failed to pull LPN.");
             }
 
-            // Animate only after the server confirms deletion.
+            // Animates only after the server confirms deletion.
             pullForm.classList.add("pulling");
 
             moveMessage.textContent =

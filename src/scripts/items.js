@@ -1,11 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.querySelector("#itemsTable tbody");
 
+    // for testing. Should keep just in case
     if (!tableBody) {
         console.error("Could not find \"#itemsTable tbody\".");
         return;
     }
 
+    // for testing. DO NOT REMOVE.
     try {
         const response = await fetch("/api/items");
 
@@ -21,7 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         items.forEach(item => {
             const row = document.createElement("tr");
-
+            
+            // noMobile for un nessesary production information
             row.innerHTML = `
                 <td>${item.sku ?? ""}</td>
                 <td>${item.description ?? ""}</td>

@@ -205,7 +205,7 @@ function initializeSummary() {
         }
     }
 
-    // Modal builder
+    // Modal builder (api use)
     function openModal(pallet) {
         const totalWeight = pallet.totalWeight;
 

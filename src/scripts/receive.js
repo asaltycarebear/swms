@@ -29,13 +29,11 @@ showNewItemBtn.addEventListener("click", showNewItemForm);
 // Set default form.
 showReceiveForm();
 
-/*
- * New Item settings
- *
- * Keep false to save only to localStorage.
- * Change to true when the backend API is ready. Will make this a setting later
- */
-const SAVE_TO_JSON = true;
+
+// New Item settings
+    // Keep false to save only to localStorage.
+    // Change to true when the backend API is ready. Will make this a setting later--CHANGED
+    const SAVE_TO_JSON = true;
 
 // Build the item object from the form.
 function buildNewItem() {
@@ -99,7 +97,7 @@ newItemForm.addEventListener("submit", async function (event) {
     const item = buildNewItem();
 
     try {
-        // Always save locally first.
+        // Always save locally first. This is a bit of a security risk when using your own private servers, but can be removed in that environment
         saveItemToLocalStorage(item);
 
         // Only update items.json when enabled.
